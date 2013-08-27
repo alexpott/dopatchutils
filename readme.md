@@ -2,7 +2,7 @@
 
 ## Install
 1. Clone the repo
-2. Run composer update
+2. Run composer update (see <http://getcomposer.org>)
 
 ## Commands
 
