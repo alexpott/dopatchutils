@@ -1,8 +1,10 @@
 {
     "require": {
+           "cpliakas/git-wrapper": "1.0.0-RC1",
            "symfony/console": "v2.3.3",
            "symfony/css-selector": "2.3.3",
            "symfony/dom-crawler": "v2.3.3",
+           "symfony/yaml": "v2.3.4",
            "zendframework/zend-http": "2.2.*"
     },
     "autoload": {

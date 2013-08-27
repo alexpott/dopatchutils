@@ -15,25 +15,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SearchRtbcPatches extends SearchIssuePatch {
+class ValidateRtbcPatches extends ValidatePatch {
 
   protected function configure()
   {
     $this
-    ->setName('searchRtbcPatches')
-    ->setDescription('Searches RTBC patches for text')
-    ->addArgument(
-        'searchText',
-        InputArgument::REQUIRED,
-        'What is the text to search for?'
-      )
-    ->addOption(
-        'regex',
-        null,
-        InputOption::VALUE_NONE,
-        'If set use preg_match to search patch'
-      );
-
+    ->setName('validateRtbcPatches')
+    ->setDescription('Checks RTBC patches still apply');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output)
@@ -44,13 +32,22 @@ class SearchRtbcPatches extends SearchIssuePatch {
       'What is the url of the issue to retrieve?'
     );
     $rtbc_queue = new RtbcQueue();
-    $issues_to_search = $rtbc_queue->getIssueUris();
-    $output->writeln(count($issues_to_search) . ' issues to search.');
-    foreach ($issues_to_search as $item) {
-      $input->setArgument('url', $item);
-      parent::execute($input, $output);
-    }
+    $issues = $rtbc_queue->getIssueUris();
+    $output->writeln(count($issues) . ' issues to check.');
 
+    $progress = $this->getApplication()->getHelperSet()->get('progress');
+
+    $failed_patches = array();
+    $progress->start($output, count($issues));
+    foreach ($issues as $item) {
+      $input->setArgument('url', $item);
+      if (!$this->checkPatch($input, $output)) {
+        $failed_patches[] = '<fg=red>' . $item . ' no longer applies.</fg=red>';
+      }
+      $progress->advance();
+    }
+    $progress->finish();
+    $output->writeln($failed_patches);
   }
 
 }

@@ -3,12 +3,18 @@
 
 require './vendor/autoload.php';
 
+use DrupalPatchUtils\Command\Configure;
 use DrupalPatchUtils\Command\SearchIssuePatch;
 use DrupalPatchUtils\Command\SearchRtbcPatches;
+use DrupalPatchUtils\Command\ValidatePatch;
+use DrupalPatchUtils\Command\ValidateRtbcPatches;
 use Symfony\Component\Console\Application;
 
 
 $application = new Application();
+$application->add(new Configure());
 $application->add(new SearchIssuePatch());
 $application->add(new SearchRtbcPatches());
+$application->add(new ValidatePatch());
+$application->add(new ValidateRtbcPatches());
 $application->run();
