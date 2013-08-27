@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+require './vendor/autoload.php';
+
+use DrupalPatchUtils\Command\SearchIssuePatch;
+use DrupalPatchUtils\Command\SearchRtbcPatches;
+use Symfony\Component\Console\Application;
+
+
+$application = new Application();
+$application->add(new SearchIssuePatch());
+$application->add(new SearchRtbcPatches());
+$application->run();

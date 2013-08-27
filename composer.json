@@ -1,0 +1,13 @@
+{
+    "require": {
+           "symfony/console": "v2.3.3",
+           "symfony/css-selector": "2.3.3",
+           "symfony/dom-crawler": "v2.3.3",
+           "zendframework/zend-http": "2.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "DrupalPatchUtils\\": "src/"
+        }
+    }
+}
