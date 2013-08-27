@@ -1,8 +1,20 @@
-Usage
+# Usage
 
-Search all rtbc patches for "PathBasedGeneratorInterface"
+## Install
+1. Clone the repo
+2. Run composer update
+
+## Commands
+
+### searchRtbcPatches
+
+```
 ./dop -vvv searchRtbcPatches PathBasedGeneratorInterface
+```
+Searches all rtbc patches for "PathBasedGeneratorInterface"
 
-Search all rtbc patches using a regex
+
+```
 ./dop -vvv searchRtbcPatches "/PathBased.*Interface/" --regex
-
+```
+Searches all rtbc patches using a regex
