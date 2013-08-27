@@ -36,6 +36,9 @@ class Config {
   }
 
   public function getDrupalRepoDir() {
+    if (empty($this->drupalRepoDir)) {
+      throw new \InvalidArgumentException('No Drupal repository configured. Run ./dop configure first.');
+    }
     return $this->drupalRepoDir;
   }
 
