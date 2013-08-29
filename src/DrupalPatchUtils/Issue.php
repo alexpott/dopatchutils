@@ -2,16 +2,40 @@
 
 namespace DrupalPatchUtils;
 
+use Guzzle\Http\Client;
+
 /**
  * Provides access to a D.O issue.
  */
-class IssueInfo {
+class Issue {
   protected $issue;
 
-  public function __construct($json) {
-    $this->issue = json_decode($json);
+  /**
+   * @var string
+   */
+  protected $uri;
+
+  /**
+   * @param string $issue_id
+   *   NID or URI of an issue.
+   */
+  public function __construct($issue_id) {
+    if (is_numeric($issue_id)) {
+      $this->uri = 'https://drupal.org/node/' . $issue_id . '/project-issue/json';
+    }
+    elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
+      $this->uri = $issue_id . '/project-issue/json';
+    }
+    $this->getIssue();
   }
 
+  protected function getIssue() {
+    $client = new Client();
+    $request = $client->get($this->uri);
+    $response = $request->send();
+    $this->issue = json_decode($response->getBody());
+    return $this;
+  }
   /**
    * Gets the URI of the issue.
    *

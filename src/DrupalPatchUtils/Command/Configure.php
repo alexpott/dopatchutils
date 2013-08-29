@@ -20,11 +20,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class Configure extends Command {
 
-  /**
-   * @var \Symfony\Component\Console\Helper\DialogHelper
-   */
-  protected $dialog;
-
   protected function configure()
   {
     $this

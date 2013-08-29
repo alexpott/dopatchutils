@@ -9,14 +9,12 @@
 
 namespace DrupalPatchUtils\Command;
 
-use DrupalPatchUtils\IssueInfo;
+use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Http\Client;
-use Zend\Http\Request;
 
 abstract class PatchChooserBase extends Command {
 
@@ -24,29 +22,24 @@ abstract class PatchChooserBase extends Command {
 
   /**
    * @param $uri
-   * @return IssueInfo|bool
+   * @return Issue|bool
    */
   protected function getIssue($uri) {
-    $request = new Request();
-    $request->setUri($uri . '/project-issue/json');
-
-    $client = new Client();
-    $response = $client->dispatch($request);
-
-
-    if ($response->isSuccess()) {
-      return new IssueInfo($response->getBody());
+    try {
+      return new Issue($uri);
     }
-    return FALSE;
+    catch (\Exception $e) {
+      return FALSE;
+    }
   }
 
   /**
-   * @param IssueInfo $issue
+   * @param Issue $issue
    * @param InputInterface $input
    * @param OutputInterface $output
    * @return string|bool
    */
-  protected function choosePatch(IssueInfo $issue, InputInterface $input, OutputInterface $output) {
+  protected function choosePatch(Issue $issue, InputInterface $input, OutputInterface $output) {
     $patch = FALSE;
     $patches_to_search = $issue->getLatestPatch();
     if (count($patches_to_search) > 1) {

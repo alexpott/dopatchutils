@@ -9,12 +9,11 @@
 
 namespace DrupalPatchUtils\Command;
 
+use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Http\Client;
-use Zend\Http\Request;
 
 /**
  * Class SearchIssuePatch
@@ -57,17 +56,14 @@ class SearchIssuePatch extends PatchChooserBase {
           $output->writeln('Searching ' . $patch);
         }
 
-        $request = new Request();
-        $request->setUri($patch);
-
         $client = new Client();
-        $response = $client->dispatch($request);
-        $body = $response->getBody();
+        $request = $client->get($patch);
+        $response = $request->send();
         if ($regex) {
-          $found = preg_match($search_text, $body);
+          $found = preg_match($search_text, $response->getBody());
         }
         else {
-          $found = strpos($body, $search_text);
+          $found = strpos($response->getBody(), $search_text);
         }
 
         if ($found) {
