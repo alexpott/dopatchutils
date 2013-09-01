@@ -53,8 +53,7 @@ class ValidatePatch extends PatchChooserBase {
       $patch = $this->choosePatch($issue, $input, $output);
       if ($patch) {
         $this->verbose($output, "Checking $patch applies");
-        $config = new Config();
-        $repo_dir = $config->load()->getDrupalRepoDir();
+        $repo_dir = $this->getConfig()->getDrupalRepoDir();
         $this->ensureLatestRepo($repo_dir);
 
         $process = new Process("curl $patch | git apply --check");

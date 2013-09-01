@@ -58,7 +58,7 @@ class ValidateRtbcPatches extends ValidatePatch {
 
     if ($input->getOption('mark-needs-work')) {
       $browser = new DoBrowser();
-      $browser->login('alexpott', $this->ask($output, "Enter your Drupal.org password: "));
+      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
       foreach ($failed_patches as $issue) {
         $issue = $this->getIssue($issue);
         if ($issue) {

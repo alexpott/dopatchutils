@@ -29,14 +29,28 @@ class Configure extends Command {
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
+    $config = new Config();
+    $config->load();
     $app = $this->getApplication();
     $dialog = $app->getHelperSet()->get('dialog');
-    $dir = $dialog->askAndValidate($output, "Enter path to Drupal repository? ", array($this, 'validateDrupalRepo'), FALSE);
+    try {
+      $default = $config->getDrupalRepoDir();
+    }
+    catch (\Exception $e) {
+      $default = FALSE;
+    }
+    $dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
+    try {
+      $default = $config->getDrupalUser();
+    }
+    catch (\Exception $e) {
+      $default = FALSE;
+    }
+    $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
 
-    $config = new Config();
     $config
-      ->load()
       ->setDrupalRepoDir($dir)
+      ->setDrupalUser($douser)
       ->write();
   }
 

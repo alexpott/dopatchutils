@@ -9,11 +9,17 @@
 
 namespace DrupalPatchUtils\Command;
 
+use DrupalPatchUtils\Config;
 use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandBase extends Command {
+
+  /**
+   * @var \DrupalPatchUtils\Config
+   */
+  protected $config;
 
   /**
    * @param OutputInterface $output
@@ -44,10 +50,27 @@ class CommandBase extends Command {
    *
    * @return string
    */
-  protected function ask (OutputInterface $output, $question, $default = '') {
+  protected function ask (OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
     // Need to choose patch.
     $app = $this->getApplication();
     $dialog = $app->getHelperSet()->get('dialog');
-    return $dialog->ask($output, $question, $default);
+    if ($hidden_response) {
+      $response = $dialog->askHiddenResponse($output, $question, $default);
+    }
+    else {
+      $response = $dialog->ask($output, $question, $default);
+    }
+    return $response;
+  }
+
+  /**
+   * @return \DrupalPatchUtils\Config
+   */
+  protected function getConfig() {
+    if (!is_object($this->config)) {
+      $this->config = new Config();
+      $this->config->load();
+    }
+    return $this->config;
   }
 }
