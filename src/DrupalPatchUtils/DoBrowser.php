@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils;
 
 use Goutte\Client;
+use Symfony\Component\DomCrawler\Form;
 
 class DoBrowser {
 
@@ -21,8 +22,18 @@ class DoBrowser {
     $crawler = $this->client->request('GET', 'https://drupal.org/user/');
     $form = $crawler->selectButton('Log in')->form();
     $this->client->submit($form, array('name' => $user, 'pass' => $pass));
-    var_dump($this->client->getResponse());
   }
 
+  /**
+   * @param Issue $issue
+   * @return \DrupalPatchUtils\CommentForm
+   */
+  public function getCommentForm(Issue $issue) {
+    $crawler = $this->client->request('GET', $issue->getUri());
+    return new CommentForm($crawler->selectButton('Save')->form());
+  }
 
+  public function submitForm (Form $form) {
+    $this->client->submit(($form));
+  }
 }
