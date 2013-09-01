@@ -61,7 +61,7 @@ class RtbcQueue {
     }
 
     $client = new Client();
-    $request = $client->get($this->uri . '&page=' . $this->nextPage);
+    $request = $client->get($this->uri . '&page=' . $this->nextPage . '&' . substr(md5(microtime()),rand(0,26),5));
     $response = $request->send();
 
     // Set nextPage to FALSE if we've read the last page.
