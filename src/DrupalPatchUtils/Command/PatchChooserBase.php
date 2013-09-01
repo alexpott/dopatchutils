@@ -10,28 +10,15 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Issue;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class PatchChooserBase extends Command {
+abstract class PatchChooserBase extends CommandBase {
 
-  protected $issue;
+  //protected $issue;
 
-  /**
-   * @param $uri
-   * @return Issue|bool
-   */
-  protected function getIssue($uri) {
-    try {
-      return new Issue($uri);
-    }
-    catch (\Exception $e) {
-      return FALSE;
-    }
-  }
 
   /**
    * @param Issue $issue

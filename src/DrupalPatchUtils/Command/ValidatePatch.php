@@ -42,6 +42,9 @@ class ValidatePatch extends PatchChooserBase {
     if (!$this->checkPatch($input, $output)) {
       $output->writeln('<fg=red>' . $input->getArgument('url') . ' no longer applies.</fg=red>');
     }
+    else {
+      $output->writeln('<fg=green>' . $input->getArgument('url') . ' applies.</fg=green>');
+    }
   }
 
   protected function checkPatch(InputInterface $input, OutputInterface $output) {
@@ -49,6 +52,7 @@ class ValidatePatch extends PatchChooserBase {
     if ($issue) {
       $patch = $this->choosePatch($issue, $input, $output);
       if ($patch) {
+        $this->verbose($output, "Checking $patch applies");
         $config = new Config();
         $repo_dir = $config->load()->getDrupalRepoDir();
         $this->ensureLatestRepo($repo_dir);

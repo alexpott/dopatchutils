@@ -46,11 +46,15 @@ class SearchRtbcPatches extends SearchIssuePatch {
     $rtbc_queue = new RtbcQueue();
     $issues_to_search = $rtbc_queue->getIssueUris();
     $output->writeln(count($issues_to_search) . ' issues to search.');
+
+    $progress = $this->getApplication()->getHelperSet()->get('progress');
+    $progress->start($output, count($issues_to_search));
     foreach ($issues_to_search as $item) {
       $input->setArgument('url', $item);
       parent::execute($input, $output);
+      $progress->advance();
     }
-
+    $progress->finish();
   }
 
 }

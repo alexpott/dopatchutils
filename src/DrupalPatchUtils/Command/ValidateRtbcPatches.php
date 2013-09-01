@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\RtbcQueue;
+use DrupalPatchUtils\DoBrowser;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,7 +22,13 @@ class ValidateRtbcPatches extends ValidatePatch {
   {
     $this
     ->setName('validateRtbcPatches')
-    ->setDescription('Checks RTBC patches still apply');
+    ->setDescription('Checks RTBC patches still apply')
+    ->addOption(
+      'mark-needs-work',
+      null,
+      InputOption::VALUE_NONE,
+      'Use if you want to automatically set the patches to needs work'
+    );
   }
 
   protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,12 +49,27 @@ class ValidateRtbcPatches extends ValidatePatch {
     foreach ($issues as $item) {
       $input->setArgument('url', $item);
       if (!$this->checkPatch($input, $output)) {
-        $failed_patches[] = '<fg=red>' . $item . ' no longer applies.</fg=red>';
+        $failed_patches[] = $item;
       }
       $progress->advance();
     }
     $progress->finish();
-    $output->writeln($failed_patches);
+    $output->writeln(array_map(function ($value) {return '<fg=red>' . $value . ' no longer applies.</fg=red>';}, $failed_patches));
+
+    if ($input->getOption('mark-needs-work')) {
+      $browser = new DoBrowser();
+      $browser->login('alexpott', $this->ask($output, "Enter your Drupal.org password: "));
+      foreach ($failed_patches as $issue) {
+        $issue = $this->getIssue($issue);
+        if ($issue) {
+          $comment_form = $browser->getCommentForm($issue);
+          $comment_form->setStatusNeedsWork();
+          $comment_form->setCommentText('Patch no longer applies.');
+          $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
+          $browser->submitForm($comment_form->getForm());
+        }
+      }
+    }
   }
 
 }
