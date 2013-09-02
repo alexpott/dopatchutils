@@ -57,7 +57,7 @@ class Issue {
     foreach ($this->issue->attachments as $comment_number => $attachment) {
       $comment_patches[$comment_number] = array();
       foreach ($attachment->urls as $url) {
-        if (preg_match('/\.(patch|diff)$/', $url) && !preg_match('/\.do_not_test\.patch$/', $url)) {
+        if (preg_match('/\.(patch|diff)$/', $url) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $url)) {
           $comment_patches[$comment_number][] = $url;
         }
       }
