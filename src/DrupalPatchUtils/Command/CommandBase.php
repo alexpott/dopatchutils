@@ -52,8 +52,7 @@ class CommandBase extends Command {
    */
   protected function ask (OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
     // Need to choose patch.
-    $app = $this->getApplication();
-    $dialog = $app->getHelperSet()->get('dialog');
+    $dialog = $this->getDialog();
     if ($hidden_response) {
       $response = $dialog->askHiddenResponse($output, $question, $default);
     }
@@ -72,5 +71,23 @@ class CommandBase extends Command {
       $this->config->load();
     }
     return $this->config;
+  }
+
+  /**
+   * @return \Symfony\Component\Console\Helper\DialogHelper
+   */
+  protected function getDialog() {
+    $app = $this->getApplication();
+    return $app->getHelperSet()->get('dialog');
+  }
+
+  /**
+   * @param OutputInterface $output
+   * @param $question
+   * @param bool $default
+   * @return bool
+   */
+  protected function askConfirmation (OutputInterface $output, $question, $default = FALSE) {
+    return $this->getDialog()->askConfirmation($output, $question, $default);
   }
 }
