@@ -48,7 +48,10 @@ class ValidateRtbcPatches extends ValidatePatch {
     $progress->start($output, count($issues));
     foreach ($issues as $item) {
       $input->setArgument('url', $item);
-      if (!$this->checkPatch($input, $output)) {
+      // Ignore NULL return where checkPatch() is unable to determine if patch
+      // applies or not. This normally occurs because the issue does not have
+      // a patch.
+      if ($this->checkPatch($input, $output) === FALSE) {
         $failed_patches[] = $item;
       }
       $progress->advance();

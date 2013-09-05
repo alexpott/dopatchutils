@@ -39,14 +39,25 @@ class ValidatePatch extends PatchChooserBase {
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    if (!$this->checkPatch($input, $output)) {
+    $patch_status = $this->checkPatch($input, $output);
+    if ($patch_status === FALSE) {
       $output->writeln('<fg=red>' . $input->getArgument('url') . ' no longer applies.</fg=red>');
+    }
+    else if (is_null($patch_status)) {
+      $output->writeln('<fg=red>Unable to check patch. Maybe ' . $input->getArgument('url') . ' does not have one.</fg=red>');
     }
     else {
       $output->writeln('<fg=green>' . $input->getArgument('url') . ' applies.</fg=green>');
     }
   }
 
+  /**
+   * @param InputInterface $input
+   * @param OutputInterface $output
+   * @return bool|null
+   *   TRUE is patch applies, FALSE if patch does not, and NULL if something
+   *   else occurs.
+   */
   protected function checkPatch(InputInterface $input, OutputInterface $output) {
     $issue = $this->getIssue($input->getArgument('url'));
     if ($issue) {
@@ -62,9 +73,13 @@ class ValidatePatch extends PatchChooserBase {
         if ($process->isSuccessful()) {
           return TRUE;
         }
+        else {
+          return FALSE;
+        }
       }
     }
-    return FALSE;
+    // There is no patch, or there is a problem getting the issue.
+    return NULL;
   }
 
   /**
