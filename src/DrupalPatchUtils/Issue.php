@@ -60,7 +60,17 @@ class Issue {
    */
   public function getLatestPatch() {
     $patches = $this->getPatches();
-    return array(array_shift($patches));
+    $choices = array();
+    foreach ($patches as $patch) {
+      $choices[] = $patch;
+      // Continue to loop if possible interdiff or patch meant to fail.
+      if (strpos($patch, 'interdiff') === FALSE &&
+          strpos($patch, 'fail') === FALSE
+      ) {
+        break;
+      }
+    }
+    return $choices;
   }
 
   protected function getPatches() {
