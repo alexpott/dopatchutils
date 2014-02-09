@@ -16,6 +16,8 @@ use Guzzle\Http\Url;
 
 class RtbcQueue {
 
+  const DEFAULT_URI = 'https://drupal.org/project/issues/drupal?status=14&version=8.x&text=&priorities=All&categories=All&component=All&order=last_comment_timestamp&sort=asc';
+
   /**
    * @var \Guzzle\Http\Url
    */
@@ -25,7 +27,10 @@ class RtbcQueue {
 
   protected $nextPage = 0;
 
-  public function __construct($uri = 'https://drupal.org/project/issues/drupal?order=last_comment_timestamp&sort=asc&status=14&version=8.x&text=&priorities=All&categories=All&component=All') {
+  public function __construct($uri = NULL) {
+    if (empty($uri)) {
+      $uri = $this::DEFAULT_URI;
+    }
     $this->uri = Url::factory($uri);
   }
 
@@ -66,7 +71,7 @@ class RtbcQueue {
 
     // Set nextPage to FALSE if we've read the last page.
     $crawler = new Crawler((string)$response->getBody());
-    $found = $crawler->filter('ul.pager li.pager-next');
+    $found = $crawler->filter('ul.pager li.pager-next a');
     if (!$found->count()) {
       $this->nextPage = FALSE;
     }
