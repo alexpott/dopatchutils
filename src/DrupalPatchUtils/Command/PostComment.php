@@ -9,15 +9,10 @@
 
 namespace DrupalPatchUtils\Command;
 
-use DrupalPatchUtils\Command\CommandBase;
-use DrupalPatchUtils\Config;
 use DrupalPatchUtils\DoBrowser;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class PostComment extends CommandBase {
 
@@ -40,7 +35,7 @@ class PostComment extends CommandBase {
     if ($issue) {
       $browser = new DoBrowser();
       $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-      $comment_form = $browser->getCommentForm($issue);
+      $comment_form = $browser->getCommentForm($issue->getUri());
 
       $comment_form->setStatusNeedsWork();
       $comment_form->setCommentText('Automated Alex!');

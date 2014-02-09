@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Issue;
+use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,6 +20,12 @@ abstract class PatchChooserBase extends CommandBase {
 
   //protected $issue;
 
+  /**
+   * The name of the patch.
+   *
+   * @var string
+   */
+  protected $patch;
 
   /**
    * @param Issue $issue
@@ -70,5 +77,29 @@ abstract class PatchChooserBase extends CommandBase {
       $counter++;
       return $value;
     }, $patches_to_search);
+  }
+
+  protected function getPatch($patch) {
+    $cache_dir = $this->getConfig()
+                      ->getCacheDir() . DIRECTORY_SEPARATOR . 'patches';
+
+    if (!is_dir($cache_dir)) {
+      mkdir($cache_dir);
+    }
+    $this->patch = basename($patch);
+    $cached_patch = $cache_dir . DIRECTORY_SEPARATOR . $this->patch;
+    if (!file_exists($cached_patch)) {
+      // Do not use a cached client since we're implementing caching.
+      $client = new Client();
+      $contents = $client->get($patch)
+                         ->send()
+                         ->getBody(TRUE);
+      file_put_contents($cached_patch, $contents);
+    }
+    return $cached_patch;
+  }
+
+  public function getPatchName() {
+    return $this->patch;
   }
 }

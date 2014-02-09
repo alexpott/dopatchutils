@@ -55,19 +55,17 @@ class SearchIssuePatch extends PatchChooserBase {
         if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
           $output->writeln('Searching ' . $patch);
         }
-
-        $client = new Client();
-        $request = $client->get($patch);
-        $response = $request->send();
+        $patch = $this->getPatch($patch);
+        $contents = \file_get_contents($patch);
         if ($regex) {
-          $found = preg_match($search_text, $response->getBody());
+          $found = preg_match($search_text, $contents);
         }
         else {
-          $found = strpos($response->getBody(), $search_text);
+          $found = strpos($contents, $search_text);
         }
 
         if ($found) {
-          $output->writeln('<fg=green>Found text "'. $search_text .'" in '. $issue->getUri() . '</fg=green>');
+          $output->writeln('<fg=green>Found text "'. $search_text .'" in '. $this->patch . ' on ' . $issue->getUri() . '</fg=green>');
         }
       }
     }

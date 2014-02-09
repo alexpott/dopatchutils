@@ -52,25 +52,22 @@ class ValidateRtbcPatches extends ValidatePatch {
       // applies or not. This normally occurs because the issue does not have
       // a patch.
       if ($this->checkPatch($input, $output) === FALSE) {
-        $failed_patches[] = $item;
+        $failed_patches[] = array('issue' => $item, 'patch' => $this->getPatchName(), 'output' => $this->getOutput());
       }
       $progress->advance();
     }
     $progress->finish();
-    $output->writeln(array_map(function ($value) {return '<fg=red>' . $value . ' no longer applies.</fg=red>';}, $failed_patches));
+    $output->writeln(array_map(function ($value) {return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';}, $failed_patches));
 
-    if ($input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues?')) {
+    if (count($failed_patches) && $input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
       $browser = new DoBrowser();
       $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-      foreach ($failed_patches as $issue) {
-        $issue = $this->getIssue($issue);
-        if ($issue) {
-          $comment_form = $browser->getCommentForm($issue);
-          $comment_form->setStatusNeedsWork();
-          $comment_form->setCommentText('Patch no longer applies.');
-          $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
-          $browser->submitForm($comment_form->getForm());
-        }
+      foreach ($failed_patches as $item) {
+        $comment_form = $browser->getCommentForm($item['issue']);
+        $comment_form->setStatusNeedsWork();
+        $comment_form->setCommentText($item['patch'] . " no longer applies.\n<code>\n" . $item['output']. "\n</code>");
+        $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
+        $browser->submitForm($comment_form->getForm());
       }
     }
   }
