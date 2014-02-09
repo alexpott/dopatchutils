@@ -48,14 +48,14 @@ class CommentForm {
   }
 
   public function setCommentText($text) {
-    $comment = $this->form->get('comment');
+    $comment = $this->form->get('nodechanges_comment_body[value]');
     $comment->setValue($text);
     $this->form->set($comment);
     return $this;
   }
 
   public function ensureTag($value) {
-    $tags = $this->form->get('taxonomy[tags][9]');
+    $tags = $this->form->get('taxonomy_vocabulary_9[und]');
     if (strpos($tags->getValue(), $value) === FALSE) {
       if (strlen($tags->getValue()) == 0) {
         $tags->setValue($value);
@@ -75,7 +75,7 @@ class CommentForm {
    * @return $this
    */
   protected function setStatus($value) {
-    $status = $this->form->get('sid');
+    $status = $this->form->get('field_issue_status[und]');
     $status->setValue($value);
     $this->form->set($status);
     return $this;

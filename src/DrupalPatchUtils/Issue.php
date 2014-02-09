@@ -3,6 +3,7 @@
 namespace DrupalPatchUtils;
 
 use Guzzle\Http\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Provides access to a D.O issue.
@@ -21,19 +22,24 @@ class Issue {
    */
   public function __construct($issue_id) {
     if (is_numeric($issue_id)) {
-      $this->uri = 'https://drupal.org/node/' . $issue_id . '/project-issue/json';
+      $this->uri = 'https://drupal.org/node/' . $issue_id;
     }
     elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
-      $this->uri = $issue_id . '/project-issue/json';
+      $this->uri = $issue_id;
     }
     $this->getIssue();
   }
 
   protected function getIssue() {
-    $client = new Client();
-    $request = $client->get($this->uri);
-    $response = $request->send();
-    $this->issue = json_decode($response->getBody());
+    $doBrowser = new DoBrowser();
+    // Get guzzle client.
+    // @todo swap all this for proper dependency injection.
+    $client = $doBrowser->getClient()->getClient();
+    $this->html = $client
+      ->get($this->uri)
+      ->send()
+      ->getBody(TRUE);
+    $this->crawler = new Crawler($this->html);
     return $this;
   }
   /**
@@ -42,7 +48,7 @@ class Issue {
    * @return string
    */
   public function getUri() {
-    return $this->issue->url;
+    return $this->uri;
   }
 
   /**
@@ -53,23 +59,23 @@ class Issue {
    *   been tested by testbot.
    */
   public function getLatestPatch() {
-    $comment_patches = array();
-    foreach ($this->issue->attachments as $comment_number => $attachment) {
-      $comment_patches[$comment_number] = array();
-      foreach ($attachment->urls as $url) {
-        if (preg_match('/\.(patch|diff)$/', $url) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $url)) {
-          $comment_patches[$comment_number][] = $url;
+    $patches = $this->getPatches();
+    return array(array_shift($patches));
+  }
+
+  protected function getPatches() {
+    if (!isset($this->patches)) {
+      $files = $this->crawler
+        ->filter('table#extended-file-field-table-field-issue-files td.extended-file-field-table-filename a')
+        ->extract(array('href'));
+      $this->patches = array_filter($files, function ($item) {
+        if (preg_match('/\.(patch|diff)$/', $item) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $item)) {
+          return TRUE;
         }
-      }
-      if (empty($comment_patches[$comment_number])) {
-        unset($comment_patches[$comment_number]);
-      }
+        return FALSE;
+      });
     }
-    if (count($comment_patches)) {
-      // Get the last valid comment patches.
-      $comment_patches = array_pop($comment_patches);
-    }
-    return $comment_patches;
+    return $this->patches;
   }
 
   /**
@@ -78,12 +84,9 @@ class Issue {
    * @return bool
    */
   public function hasPatch() {
-    foreach ($this->issue->attachments as $comment_number => $attachment) {
-      foreach ($attachment->urls as $url) {
-        if (substr($url, -6) == ".patch" || substr($url, -5) == ".diff") {
-          return TRUE;
-        }
-      }
+    $patches = $this->getPatches();
+    if (!empty($patches)) {
+      return TRUE;
     }
     return FALSE;
   }
