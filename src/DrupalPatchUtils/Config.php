@@ -24,6 +24,11 @@ class Config {
    */
   protected $drupalUser;
 
+  /**
+   * @var string
+   */
+  protected $cacheDir;
+
   protected $loaded = FALSE;
 
   /**
@@ -35,7 +40,13 @@ class Config {
       $config = $yaml->parse($this->getConfigFilename());
       $this->drupalRepoDir = isset($config['drupal_repository_dir']) ? $config['drupal_repository_dir'] : '';
       $this->drupalUser = isset($config['drupal_user']) ? $config['drupal_user'] : '';
+      $this->cacheDir = isset($config['cache_dir']) ? $config['cache_dir'] : '';
     }
+    return $this;
+  }
+
+  public function setCacheDir($dir) {
+    $this->cacheDir = $dir;
     return $this;
   }
 
@@ -63,9 +74,18 @@ class Config {
     return $this->drupalUser;
   }
 
+  public function getCacheDir() {
+    if (empty($this->cacheDir)) {
+      throw new \InvalidArgumentException('No cache dir configured. Run ./dop configure first.');
+    }
+    return $this->cacheDir;
+
+  }
+
 
   public function write() {
     $config = array(
+      'cache_dir' => $this->cacheDir,
       'drupal_repository_dir' => $this->drupalRepoDir,
       'drupal_user' => $this->drupalUser,
     );

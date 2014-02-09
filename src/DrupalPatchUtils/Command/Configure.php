@@ -34,12 +34,20 @@ class Configure extends Command {
     $app = $this->getApplication();
     $dialog = $app->getHelperSet()->get('dialog');
     try {
+      $default = $config->getCacheDir();
+    }
+    catch (\Exception $e) {
+      $default = FALSE;
+    }
+    $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", array($this, 'validateCacheDir'), FALSE, $default);
+
+    try {
       $default = $config->getDrupalRepoDir();
     }
     catch (\Exception $e) {
       $default = FALSE;
     }
-    $dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
+    $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
     try {
       $default = $config->getDrupalUser();
     }
@@ -49,7 +57,8 @@ class Configure extends Command {
     $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
 
     $config
-      ->setDrupalRepoDir($dir)
+      ->setCacheDir($cache_dir)
+      ->setDrupalRepoDir($repo_dir)
       ->setDrupalUser($douser)
       ->write();
   }
@@ -67,4 +76,14 @@ class Configure extends Command {
     return $dir;
   }
 
+  public function validateCacheDir($dir) {
+    if (!is_dir($dir)) {
+      throw new \InvalidArgumentException(sprintf('"%s" is not a directory.', $dir));
+    }
+    if (!is_writable($dir)) {
+      throw new \InvalidArgumentException(sprintf('"%s" is not writable.', $dir));
+    }
+    return $dir;
+
+  }
 }
