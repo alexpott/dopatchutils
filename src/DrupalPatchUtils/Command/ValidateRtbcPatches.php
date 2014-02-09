@@ -70,6 +70,9 @@ class ValidateRtbcPatches extends ValidatePatch {
         $browser->submitForm($comment_form->getForm());
       }
     }
+    else {
+      $output->writeln('<fg=green>All patches apply</fg=green>');
+    }
   }
 
 }
