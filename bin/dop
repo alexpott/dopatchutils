@@ -3,23 +3,17 @@
 
 require __DIR__ . "/../vendor/autoload.php";
 
-use DrupalPatchUtils\Command\Configure;
-use DrupalPatchUtils\Command\PostComment;
-use DrupalPatchUtils\Command\SearchIssuePatch;
-use DrupalPatchUtils\Command\SearchRtbcPatches;
-use DrupalPatchUtils\Command\ValidatePatch;
-use DrupalPatchUtils\Command\ValidateRtbcPatches;
-use Symfony\Component\Console\Application;
+use DrupalPatchUtils\Command as Cmd;
 
-$application = new Application();
+$application = new Symfony\Component\Console\Application();
 $application->addCommands(
     [
-        new Configure(),
-        new PostComment(),
-        new SearchIssuePatch(),
-        new SearchRtbcPatches(),
-        new ValidatePatch(),
-        new ValidateRtbcPatches(),
+        new Cmd\ConfigureCommand(),
+        new Cmd\PostCommentCommand(),
+        new Cmd\SearchIssuePatchCommand(),
+        new Cmd\SearchRtbcPatchesCommand(),
+        new Cmd\ValidatePatchCommand(),
+        new Cmd\ValidateRtbcPatchesCommand(),
     ]
 );
 

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PostComment extends CommandBase
+class PostCommentCommand extends CommandBase
 {
     protected function configure()
     {
@@ -51,5 +51,4 @@ class PostComment extends CommandBase
             // var_dump($comment_form);
         }
     }
-
 }

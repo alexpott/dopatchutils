@@ -5,7 +5,7 @@ namespace DrupalPatchUtils\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Configure extends CommandBase
+class ConfigureCommand extends CommandBase
 {
     protected function configure()
     {
