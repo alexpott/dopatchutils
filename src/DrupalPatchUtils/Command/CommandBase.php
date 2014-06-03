@@ -47,10 +47,11 @@ class CommandBase extends Command {
    * @param OutputInterface $output
    * @param string $question
    * @param string $default
+   * @param bool $hidden_response
    *
    * @return string
    */
-  protected function ask (OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
+  protected function ask(OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
     // Need to choose patch.
     $dialog = $this->getDialog();
     if ($hidden_response) {
@@ -70,6 +71,7 @@ class CommandBase extends Command {
       $this->config = new Config();
       $this->config->load();
     }
+
     return $this->config;
   }
 
@@ -78,6 +80,7 @@ class CommandBase extends Command {
    */
   protected function getDialog() {
     $app = $this->getApplication();
+
     return $app->getHelperSet()->get('dialog');
   }
 
@@ -87,7 +90,7 @@ class CommandBase extends Command {
    * @param bool $default
    * @return bool
    */
-  protected function askConfirmation (OutputInterface $output, $question, $default = FALSE) {
+  protected function askConfirmation(OutputInterface $output, $question, $default = FALSE) {
     return $this->getDialog()->askConfirmation($output, $question, $default);
   }
 }

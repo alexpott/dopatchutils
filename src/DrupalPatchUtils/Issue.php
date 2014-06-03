@@ -85,6 +85,7 @@ class Issue {
         return FALSE;
       });
     }
+
     return $this->patches;
   }
 
@@ -98,6 +99,7 @@ class Issue {
     if (!empty($patches)) {
       return TRUE;
     }
+
     return FALSE;
   }
 }

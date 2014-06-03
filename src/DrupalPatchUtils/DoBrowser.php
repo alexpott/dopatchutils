@@ -31,6 +31,7 @@ class DoBrowser {
    */
   public function getCommentForm($issue_uri) {
     $crawler = $this->client->request('GET', $issue_uri . '/edit');
+
     return new CommentForm($crawler->selectButton('Save')->form());
   }
 

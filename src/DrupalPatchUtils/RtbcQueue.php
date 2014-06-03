@@ -9,10 +9,9 @@
 
 namespace DrupalPatchUtils;
 
-use Symfony\Component\CssSelector\CssSelector;
-use Symfony\Component\DomCrawler\Crawler;
 use Guzzle\Http\Client;
 use Guzzle\Http\Url;
+use Symfony\Component\DomCrawler\Crawler;
 
 class RtbcQueue {
 

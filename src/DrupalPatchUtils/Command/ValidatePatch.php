@@ -9,12 +9,10 @@
 
 namespace DrupalPatchUtils\Command;
 
-use DrupalPatchUtils\Config;
 use GitWrapper\GitWrapper;
 use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -97,7 +95,7 @@ class ValidatePatch extends PatchChooserBase {
   /**
    * Helper function to convert patch list into numbered list.
    *
-   * @param array $patches_to_search
+   * @param array @repo_dir
    * @return array
    */
   protected function ensureLatestRepo($repo_dir) {
