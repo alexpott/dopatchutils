@@ -9,7 +9,6 @@
 
 namespace DrupalPatchUtils;
 
-
 use Symfony\Component\DomCrawler\Form;
 
 class CommentForm {
@@ -70,6 +69,7 @@ class CommentForm {
   public function getForm () {
     return $this->form;
   }
+
   /**
    * @param integer $value
    * @return $this
@@ -78,6 +78,7 @@ class CommentForm {
     $status = $this->form->get('field_issue_status[und]');
     $status->setValue($value);
     $this->form->set($status);
+
     return $this;
   }
 

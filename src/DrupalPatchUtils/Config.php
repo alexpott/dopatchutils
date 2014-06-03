@@ -9,7 +9,6 @@
 
 namespace DrupalPatchUtils;
 
-
 use Symfony\Component\Yaml\Yaml;
 
 class Config {
