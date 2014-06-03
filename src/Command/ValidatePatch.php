@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: alex
- * Date: 09/08/2013
- * Time: 02:42
- * To change this template use File | Settings | File Templates.
- */
 
 namespace DrupalPatchUtils\Command;
 
@@ -16,10 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-/**
- * Class SearchIssuePatch
- * @package DrupalPatchUtils\Command
- */
 class ValidatePatch extends PatchChooserBase {
 
   protected $ensuredLatestRepo = FALSE;
@@ -80,14 +69,16 @@ class ValidatePatch extends PatchChooserBase {
         $process->run();
         if ($process->isSuccessful()) {
           $this->output = $process->getOutput();
+
           return TRUE;
         }
-        else {
-          $this->output = $process->getErrorOutput();
-          return FALSE;
-        }
+
+        $this->output = $process->getErrorOutput();
+
+        return FALSE;
       }
     }
+
     // There is no patch, or there is a problem getting the issue.
     return NULL;
   }
