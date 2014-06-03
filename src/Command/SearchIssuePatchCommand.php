@@ -31,7 +31,6 @@ class SearchIssuePatchCommand extends PatchChooserBase
                 'If set use preg_match to search patch'
             )
         ;
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
