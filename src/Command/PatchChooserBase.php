@@ -60,7 +60,7 @@ abstract class PatchChooserBase extends CommandBase {
   protected function getChoices(array $patches_to_search) {
     return array_map(function ($value) {
       static $counter = 1;
-      $value = '[' . $counter . '] ' . $value;
+      $value = '['.$counter.'] '.$value;
       if ($counter == 1) {
         $value .= ' (default)';
       }
