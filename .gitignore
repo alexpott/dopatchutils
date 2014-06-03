@@ -1,3 +1,4 @@
-iq.drush.inc
-vendor/
-cache/
+/iq.drush.inc
+/vendor/
+/composer.lock
+/cache
