@@ -13,7 +13,7 @@ class PostComment extends CommandBase
     {
         $this
             ->setName('postComment')
-            ->setAliases(array('pc'))
+            ->setAliases(['pc'])
             ->setDescription('Posts comment to d.o.')
             ->addArgument(
                 'url',
@@ -30,23 +30,25 @@ class PostComment extends CommandBase
             $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
             $comment_form = $browser->getCommentForm($issue->getUri());
 
-            $comment_form->setStatusNeedsWork();
-            $comment_form->setCommentText('Automated Alex!');
-            $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
+            $comment_form
+                ->setStatusNeedsWork()
+                ->setCommentText('Automated Alex!')
+                ->ensureTag($comment_form::TAG_NEEDS_REROLL)
+            ;
 
             $browser->submitForm($comment_form->getForm());
 
-            //$comment = $comment_form->get('comment');
-            //$comment->setValue('Testing...');
-            //$comment_form->set($comment);
+            // $comment = $comment_form->get('comment');
+            // $comment->setValue('Testing...');
+            // $comment_form->set($comment);
 
-            //$tags = $comment_form->get('taxonomy[tags]');
-            //var_dump($tags);
+            // $tags = $comment_form->get('taxonomy[tags]');
+            // var_dump($tags);
 
-            //$browser->submitForm($comment_form);
+            // $browser->submitForm($comment_form);
 
-            //var_dump($comment);
-            //var_dump($comment_form);
+            // var_dump($comment);
+            // var_dump($comment_form);
         }
     }
 

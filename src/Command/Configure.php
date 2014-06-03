@@ -3,25 +3,24 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Config;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Configure extends Command
+class Configure extends CommandBase
 {
     protected function configure()
     {
         $this
             ->setName('configure')
-            ->setDescription('Configures d.o. patch utility');
+            ->setDescription('Configures d.o. patch utility')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = new Config();
-        $config->load();
-        $app = $this->getApplication();
-        $dialog = $app->getHelperSet()->get('dialog');
+        $config = $this->getConfig();
+        $dialog = $this->getDialog();
+
         try {
             $default = $config->getCacheDir();
         } catch (\Exception $e) {
@@ -34,19 +33,23 @@ class Configure extends Command
         } catch (\Exception $e) {
             $default = FALSE;
         }
+
         $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
+
         try {
             $default = $config->getDrupalUser();
         } catch (\Exception $e) {
             $default = FALSE;
         }
+
         $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
 
         $config
             ->setCacheDir($cache_dir)
             ->setDrupalRepoDir($repo_dir)
             ->setDrupalUser($douser)
-            ->write();
+            ->write()
+        ;
     }
 
     public function validateDrupalRepo($dir)
@@ -74,6 +77,5 @@ class Configure extends Command
         }
 
         return $dir;
-
     }
 }
