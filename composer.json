@@ -1,8 +1,11 @@
 {
     "name": "gush/dopatchutils",
-    "type": "gush adapter tool for drupal.org",
-    "keywords": ["drupal", "cli", "drupal.org", "gush"],
-    "homepage": "drupal.org",
+    "type": "tool",
+    "description": "gush adapter tool for drupal.org",
+    "keywords": [
+        "drupal", "cli", "drupal.org", "gush"
+    ],
+    "homepage": "http://drupal.org",
     "license": "GPL2+",
     "authors": [
         {

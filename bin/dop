@@ -11,12 +11,16 @@ use DrupalPatchUtils\Command\ValidatePatch;
 use DrupalPatchUtils\Command\ValidateRtbcPatches;
 use Symfony\Component\Console\Application;
 
-
 $application = new Application();
-$application->add(new Configure());
-$application->add(new PostComment());
-$application->add(new SearchIssuePatch());
-$application->add(new SearchRtbcPatches());
-$application->add(new ValidatePatch());
-$application->add(new ValidateRtbcPatches());
+$application->addCommands(
+    [
+        new Configure(),
+        new PostComment(),
+        new SearchIssuePatch(),
+        new SearchRtbcPatches(),
+        new ValidatePatch(),
+        new ValidateRtbcPatches(),
+    ]
+);
+
 $application->run();
