@@ -22,6 +22,7 @@ class DoBrowser
 
     /**
      * @param string $issue_uri
+     *
      * @return \DrupalPatchUtils\CommentForm
      */
     public function getCommentForm($issue_uri)

@@ -17,8 +17,7 @@ class Issue
     protected $uri;
 
     /**
-     * @param string $issue_id
-     *   NID or URI of an issue.
+     * @param string $issue_id NID or URI of an issue.
      */
     public function __construct($issue_id)
     {
@@ -108,10 +107,7 @@ class Issue
     public function hasPatch()
     {
         $patches = $this->getPatches();
-        if (!empty($patches)) {
-            return true;
-        }
 
-        return false;
+        return !empty($patches);
     }
 }

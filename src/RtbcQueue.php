@@ -30,8 +30,7 @@ class RtbcQueue
      * Gets an array of issue uri's from an d.o project issue page(s). Will use
      * the pager to determine when all the issues have been scraped.
      *
-     * @return array
-     *   An array of d.o issue uris.
+     * @return array An array of d.o issue uris.
      */
     public function getIssueUris()
     {
@@ -60,11 +59,10 @@ class RtbcQueue
             return false;
         }
 
-        $client = new Client();
-        $request = $client->get($this->uri . '&page=' . $this->nextPage . '&' . substr(md5(microtime()), rand(0, 26), 5));
+        $request = (new Client())->get($this->uri . '&page=' . $this->nextPage . '&' . substr(md5(microtime()), rand(0, 26), 5));
         $response = $request->send();
 
-        // Set nextPage to FALSE if we've read the last page.
+        // Set nextPage to false if we've read the last page.
         $crawler = new Crawler((string) $response->getBody());
         $found = $crawler->filter('ul.pager li.pager-next a');
         if (!$found->count()) {

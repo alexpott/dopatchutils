@@ -25,6 +25,7 @@ class Configure extends CommandBase
         } catch (\Exception $e) {
             $default = false;
         }
+
         $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", array($this, 'validateCacheDir'), false, $default);
 
         try {

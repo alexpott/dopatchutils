@@ -60,6 +60,7 @@ class CommentForm
             } else {
                 $tags->setValue($tags->getValue() . ', ' . $value);
             }
+
             $this->form->set($tags);
         }
     }
