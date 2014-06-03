@@ -25,8 +25,8 @@ class SearchRtbcPatches extends SearchIssuePatch
                 null,
                 InputOption::VALUE_NONE,
                 'If set use preg_match to search patch'
-            );
-
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,5 +49,4 @@ class SearchRtbcPatches extends SearchIssuePatch
         }
         $progress->finish();
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace DrupalPatchUtils;
 
-use Guzzle\Http\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -40,7 +39,8 @@ class Issue
         $this->html = $client
             ->get($this->uri)
             ->send()
-            ->getBody(TRUE);
+            ->getBody(true)
+        ;
         $this->crawler = new Crawler($this->html);
 
         return $this;
@@ -66,12 +66,12 @@ class Issue
     public function getLatestPatch()
     {
         $patches = $this->getPatches();
-        $choices = array();
+        $choices = [];
         foreach ($patches as $patch) {
             $choices[] = $patch;
             // Continue to loop if possible interdiff or patch meant to fail.
-            if (strpos($patch, 'interdiff') === FALSE &&
-                strpos($patch, 'fail') === FALSE
+            if (strpos($patch, 'interdiff') === false &&
+                strpos($patch, 'fail') === false
             ) {
                 break;
             }
@@ -85,13 +85,14 @@ class Issue
         if (!isset($this->patches)) {
             $files = $this->crawler
                 ->filter('table#extended-file-field-table-field-issue-files td.extended-file-field-table-filename a')
-                ->extract(array('href'));
+                ->extract(['href'])
+            ;
             $this->patches = array_filter($files, function ($item) {
                 if (preg_match('/\.(patch|diff)$/', $item) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $item)) {
-                    return TRUE;
+                    return true;
                 }
 
-                return FALSE;
+                return false;
             });
         }
 
@@ -107,9 +108,9 @@ class Issue
     {
         $patches = $this->getPatches();
         if (!empty($patches)) {
-            return TRUE;
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 }

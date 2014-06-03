@@ -54,7 +54,7 @@ class CommentForm
     public function ensureTag($value)
     {
         $tags = $this->form->get('taxonomy_vocabulary_9[und]');
-        if (strpos($tags->getValue(), $value) === FALSE) {
+        if (strpos($tags->getValue(), $value) === false) {
             if (strlen($tags->getValue()) == 0) {
                 $tags->setValue($value);
             } else {

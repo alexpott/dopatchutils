@@ -29,7 +29,8 @@ class SearchIssuePatch extends PatchChooserBase
                 null,
                 InputOption::VALUE_NONE,
                 'If set use preg_match to search patch'
-            );
+            )
+        ;
 
     }
 
@@ -57,5 +58,4 @@ class SearchIssuePatch extends PatchChooserBase
             }
         }
     }
-
 }

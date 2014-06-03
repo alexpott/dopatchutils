@@ -88,7 +88,7 @@ class CommandBase extends Command
      * @param bool $default
      * @return bool
      */
-    protected function askConfirmation(OutputInterface $output, $question, $default = FALSE)
+    protected function askConfirmation(OutputInterface $output, $question, $default = false)
     {
         return $this->getDialog()->askConfirmation($output, $question, $default);
     }

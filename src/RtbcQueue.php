@@ -24,6 +24,7 @@ class RtbcQueue
         if (empty($uri)) {
             $uri = $this::DEFAULT_URI;
         }
+
         $this->uri = Url::factory($uri);
     }
 
@@ -57,8 +58,8 @@ class RtbcQueue
      */
     protected function getPage()
     {
-        if ($this->nextPage === FALSE) {
-            return FALSE;
+        if ($this->nextPage === false) {
+            return false;
         }
 
         $client = new Client();
@@ -66,10 +67,10 @@ class RtbcQueue
         $response = $request->send();
 
         // Set nextPage to FALSE if we've read the last page.
-        $crawler = new Crawler((string)$response->getBody());
+        $crawler = new Crawler((string) $response->getBody());
         $found = $crawler->filter('ul.pager li.pager-next a');
         if (!$found->count()) {
-            $this->nextPage = FALSE;
+            $this->nextPage = false;
         } else {
             $this->nextPage++;
         }

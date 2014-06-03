@@ -21,7 +21,8 @@ class ValidateRtbcPatches extends ValidatePatch
                 null,
                 InputOption::VALUE_NONE,
                 'Use if you want to automatically set the patches to needs work'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,7 +38,7 @@ class ValidateRtbcPatches extends ValidatePatch
 
         $progress = $this->getApplication()->getHelperSet()->get('progress');
 
-        $failed_patches = array();
+        $failed_patches = [];
         $progress->start($output, count($issues));
         foreach ($issues as $item) {
             $input->setArgument('url', $item);
@@ -56,12 +57,14 @@ class ValidateRtbcPatches extends ValidatePatch
 
         if (count($failed_patches) && $input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
             $browser = new DoBrowser();
-            $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+            $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', true));
             foreach ($failed_patches as $item) {
                 $comment_form = $browser->getCommentForm($item['issue']);
-                $comment_form->setStatusNeedsWork();
-                $comment_form->setCommentText($item['patch'] . " no longer applies.\n<code>\n" . $item['output'] . "\n</code>");
-                $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
+                $comment_form
+                    ->setStatusNeedsWork()
+                    ->setCommentText($item['patch'] . " no longer applies.\n<code>\n" . $item['output'] . "\n</code>")
+                    ->ensureTag($comment_form::TAG_NEEDS_REROLL)
+                ;
                 $browser->submitForm($comment_form->getForm());
             }
         } else {

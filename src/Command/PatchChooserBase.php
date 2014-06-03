@@ -72,8 +72,10 @@ abstract class PatchChooserBase extends CommandBase
 
     protected function getPatch($patch)
     {
-        $cache_dir = $this->getConfig()
-                ->getCacheDir() . DIRECTORY_SEPARATOR . 'patches';
+        $cache_dir = $this
+                ->getConfig()
+                ->getCacheDir() . DIRECTORY_SEPARATOR . 'patches'
+        ;
 
         if (!is_dir($cache_dir)) {
             mkdir($cache_dir);
@@ -83,9 +85,11 @@ abstract class PatchChooserBase extends CommandBase
         if (!file_exists($cached_patch)) {
             // Do not use a cached client since we're implementing caching.
             $client = new Client();
-            $contents = $client->get($patch)
+            $contents = $client
+                ->get($patch)
                 ->send()
-                ->getBody(TRUE);
+                ->getBody(true)
+            ;
             file_put_contents($cached_patch, $contents);
         }
 

@@ -27,7 +27,7 @@ class PostComment extends CommandBase
         $issue = $this->getIssue($input->getArgument('url'));
         if ($issue) {
             $browser = new DoBrowser();
-            $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+            $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, 'Enter your Drupal.org password: ', '', true));
             $comment_form = $browser->getCommentForm($issue->getUri());
 
             $comment_form

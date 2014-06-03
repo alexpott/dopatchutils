@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
 
 class ValidatePatch extends PatchChooserBase
 {
-    protected $ensuredLatestRepo = FALSE;
+    protected $ensuredLatestRepo = false;
 
     /**
      * The output of applying the patch.
@@ -28,13 +28,14 @@ class ValidatePatch extends PatchChooserBase
                 'url',
                 InputArgument::REQUIRED,
                 'What is the url of the issue to retrieve?'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $patch_status = $this->checkPatch($input, $output);
-        if ($patch_status === FALSE) {
+        if ($patch_status === false) {
             $output->writeln('<fg=red>' . $this->patch . ' on ' . $input->getArgument('url') . ' no longer applies.</fg=red>');
         } elseif (is_null($patch_status)) {
             $output->writeln('<fg=red>Unable to check patch. Maybe ' . $input->getArgument('url') . ' does not have one.</fg=red>');
@@ -73,12 +74,12 @@ class ValidatePatch extends PatchChooserBase
 
                 $this->output = $process->getErrorOutput();
 
-                return FALSE;
+                return false;
             }
         }
 
         // There is no patch, or there is a problem getting the issue.
-        return NULL;
+        return null;
     }
 
     /**
@@ -93,7 +94,7 @@ class ValidatePatch extends PatchChooserBase
             $wrapper = new GitWrapper();
             $git = $wrapper->workingCopy($repo_dir);
             $git->pull();
-            $this->ensuredLatestRepo = TRUE;
+            $this->ensuredLatestRepo = true;
         }
     }
 

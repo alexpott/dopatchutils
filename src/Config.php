@@ -21,7 +21,7 @@ class Config
      */
     protected $cacheDir;
 
-    protected $loaded = FALSE;
+    protected $loaded = false;
 
     /**
      * @return \DrupalPatchUtils\Config $this
