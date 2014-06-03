@@ -27,7 +27,7 @@ php bin/dop -vvv searchRtbcPatches PathBasedGeneratorInterface
 Searches all rtbc patches for "PathBasedGeneratorInterface"
 
 
-```
+```bash
 php bin/dop -vvv searchRtbcPatches "/PathBased.*Interface/" --regex
 ```
 Searches all rtbc patches using a regex
