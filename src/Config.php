@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: alex
- * Date: 27/08/2013
- * Time: 16:04
- * To change this template use File | Settings | File Templates.
- */
 
 namespace DrupalPatchUtils;
 
