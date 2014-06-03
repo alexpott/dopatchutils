@@ -4,8 +4,8 @@ namespace DrupalPatchUtils;
 
 use Symfony\Component\DomCrawler\Form;
 
-class CommentForm {
-
+class CommentForm
+{
   const STATUS_ACTIVE = 1;
   const STATUS_NEEDS_WORK = 13;
   const STATUS_NEEDS_REVIEW = 8;
@@ -27,39 +27,45 @@ class CommentForm {
    */
   protected $form;
 
-  public function __construct (Form $form) {
+  public function __construct(Form $form)
+  {
     $this->form = $form;
   }
 
   /**
    * @return $this
    */
-  public function setStatusNeedsWork() {
+  public function setStatusNeedsWork()
+  {
     $this->setStatus(static::STATUS_NEEDS_WORK);
+
     return $this;
   }
 
-  public function setCommentText($text) {
+  public function setCommentText($text)
+  {
     $comment = $this->form->get('nodechanges_comment_body[value]');
     $comment->setValue($text);
     $this->form->set($comment);
+
     return $this;
   }
 
-  public function ensureTag($value) {
+  public function ensureTag($value)
+  {
     $tags = $this->form->get('taxonomy_vocabulary_9[und]');
     if (strpos($tags->getValue(), $value) === FALSE) {
       if (strlen($tags->getValue()) == 0) {
         $tags->setValue($value);
-      }
-      else {
+      } else {
         $tags->setValue($tags->getValue() . ', '. $value);
       }
       $this->form->set($tags);
     }
   }
 
-  public function getForm () {
+  public function getForm()
+  {
     return $this->form;
   }
 
@@ -67,7 +73,8 @@ class CommentForm {
    * @param integer $value
    * @return $this
    */
-  protected function setStatus($value) {
+  protected function setStatus($value)
+  {
     $status = $this->form->get('field_issue_status[und]');
     $status->setValue($value);
     $this->form->set($status);

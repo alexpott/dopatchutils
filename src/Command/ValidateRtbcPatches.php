@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ValidateRtbcPatches extends ValidatePatch {
-
+class ValidateRtbcPatches extends ValidatePatch
+{
   protected function configure()
   {
     $this
@@ -62,8 +62,7 @@ class ValidateRtbcPatches extends ValidatePatch {
         $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
         $browser->submitForm($comment_form->getForm());
       }
-    }
-    else {
+    } else {
       $output->writeln('<fg=green>All patches apply</fg=green>');
     }
   }

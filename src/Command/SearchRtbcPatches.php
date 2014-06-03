@@ -8,8 +8,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SearchRtbcPatches extends SearchIssuePatch {
-
+class SearchRtbcPatches extends SearchIssuePatch
+{
   protected function configure()
   {
     $this

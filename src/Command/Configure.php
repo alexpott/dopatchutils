@@ -7,8 +7,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Configure extends Command {
-
+class Configure extends Command
+{
   protected function configure()
   {
     $this
@@ -24,23 +24,20 @@ class Configure extends Command {
     $dialog = $app->getHelperSet()->get('dialog');
     try {
       $default = $config->getCacheDir();
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       $default = FALSE;
     }
     $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", array($this, 'validateCacheDir'), FALSE, $default);
 
     try {
       $default = $config->getDrupalRepoDir();
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       $default = FALSE;
     }
     $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
     try {
       $default = $config->getDrupalUser();
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       $default = FALSE;
     }
     $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
@@ -52,7 +49,8 @@ class Configure extends Command {
       ->write();
   }
 
-  public function validateDrupalRepo($dir) {
+  public function validateDrupalRepo($dir)
+  {
     if (!is_dir($dir)) {
       throw new \InvalidArgumentException(sprintf('"%s" is not a directory.', $dir));
     }
@@ -66,13 +64,15 @@ class Configure extends Command {
     return $dir;
   }
 
-  public function validateCacheDir($dir) {
+  public function validateCacheDir($dir)
+  {
     if (!is_dir($dir)) {
       throw new \InvalidArgumentException(sprintf('"%s" is not a directory.', $dir));
     }
     if (!is_writable($dir)) {
       throw new \InvalidArgumentException(sprintf('"%s" is not writable.', $dir));
     }
+
     return $dir;
 
   }

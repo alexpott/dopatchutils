@@ -8,7 +8,8 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Provides access to a D.O issue.
  */
-class Issue {
+class Issue
+{
   protected $issue;
 
   /**
@@ -20,17 +21,18 @@ class Issue {
    * @param string $issue_id
    *   NID or URI of an issue.
    */
-  public function __construct($issue_id) {
+  public function __construct($issue_id)
+  {
     if (is_numeric($issue_id)) {
       $this->uri = 'https://drupal.org/node/' . $issue_id;
-    }
-    elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
+    } elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
       $this->uri = $issue_id;
     }
     $this->getIssue();
   }
 
-  protected function getIssue() {
+  protected function getIssue()
+  {
     $doBrowser = new DoBrowser();
     // Get guzzle client.
     // @todo swap all this for proper dependency injection.
@@ -40,6 +42,7 @@ class Issue {
       ->send()
       ->getBody(TRUE);
     $this->crawler = new Crawler($this->html);
+
     return $this;
   }
   /**
@@ -47,7 +50,8 @@ class Issue {
    *
    * @return string
    */
-  public function getUri() {
+  public function getUri()
+  {
     return $this->uri;
   }
 
@@ -58,7 +62,8 @@ class Issue {
    *   An array of the patch URIs on the most recent comment that might have
    *   been tested by testbot.
    */
-  public function getLatestPatch() {
+  public function getLatestPatch()
+  {
     $patches = $this->getPatches();
     $choices = array();
     foreach ($patches as $patch) {
@@ -70,10 +75,12 @@ class Issue {
         break;
       }
     }
+
     return $choices;
   }
 
-  protected function getPatches() {
+  protected function getPatches()
+  {
     if (!isset($this->patches)) {
       $files = $this->crawler
         ->filter('table#extended-file-field-table-field-issue-files td.extended-file-field-table-filename a')
@@ -82,6 +89,7 @@ class Issue {
         if (preg_match('/\.(patch|diff)$/', $item) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $item)) {
           return TRUE;
         }
+
         return FALSE;
       });
     }
@@ -94,7 +102,8 @@ class Issue {
    *
    * @return bool
    */
-  public function hasPatch() {
+  public function hasPatch()
+  {
     $patches = $this->getPatches();
     if (!empty($patches)) {
       return TRUE;

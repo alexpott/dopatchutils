@@ -7,8 +7,8 @@ use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class PatchChooserBase extends CommandBase {
-
+abstract class PatchChooserBase extends CommandBase
+{
   /**
    * The name of the patch.
    *
@@ -22,7 +22,8 @@ abstract class PatchChooserBase extends CommandBase {
    * @param OutputInterface $output
    * @return string|bool
    */
-  protected function choosePatch(Issue $issue, InputInterface $input, OutputInterface $output) {
+  protected function choosePatch(Issue $issue, InputInterface $input, OutputInterface $output)
+  {
     $patch = FALSE;
     $patches_to_search = $issue->getLatestPatch();
     if (count($patches_to_search) > 1) {
@@ -39,11 +40,9 @@ abstract class PatchChooserBase extends CommandBase {
         return $patch_key;
       }, false, 1);
       $patch = $patches_to_search[$patch_key - 1];
-    }
-    elseif (count($patches_to_search) == 1) {
+    } elseif (count($patches_to_search) == 1) {
       $patch = $patches_to_search[0];
-    }
-    else {
+    } else {
       // Nothing to do.
       $output->writeln("No patches available on ". $issue->getUri());
     }
@@ -57,7 +56,8 @@ abstract class PatchChooserBase extends CommandBase {
    * @param array $patches_to_search
    * @return array
    */
-  protected function getChoices(array $patches_to_search) {
+  protected function getChoices(array $patches_to_search)
+  {
     return array_map(function ($value) {
       static $counter = 1;
       $value = '['.$counter.'] '.$value;
@@ -70,7 +70,8 @@ abstract class PatchChooserBase extends CommandBase {
     }, $patches_to_search);
   }
 
-  protected function getPatch($patch) {
+  protected function getPatch($patch)
+  {
     $cache_dir = $this->getConfig()
                       ->getCacheDir() . DIRECTORY_SEPARATOR . 'patches';
 
@@ -87,10 +88,12 @@ abstract class PatchChooserBase extends CommandBase {
                          ->getBody(TRUE);
       file_put_contents($cached_patch, $contents);
     }
+
     return $cached_patch;
   }
 
-  public function getPatchName() {
+  public function getPatchName()
+  {
     return $this->patch;
   }
 }

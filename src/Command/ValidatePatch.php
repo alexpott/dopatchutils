@@ -3,14 +3,13 @@
 namespace DrupalPatchUtils\Command;
 
 use GitWrapper\GitWrapper;
-use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class ValidatePatch extends PatchChooserBase {
-
+class ValidatePatch extends PatchChooserBase
+{
   protected $ensuredLatestRepo = FALSE;
 
   /**
@@ -37,11 +36,9 @@ class ValidatePatch extends PatchChooserBase {
     $patch_status = $this->checkPatch($input, $output);
     if ($patch_status === FALSE) {
       $output->writeln('<fg=red>' . $this->patch . ' on ' . $input->getArgument('url') . ' no longer applies.</fg=red>');
-    }
-    else if (is_null($patch_status)) {
+    } elseif (is_null($patch_status)) {
       $output->writeln('<fg=red>Unable to check patch. Maybe ' . $input->getArgument('url') . ' does not have one.</fg=red>');
-    }
-    else {
+    } else {
       $output->writeln('<fg=green>' . $this->patch . ' on ' . $input->getArgument('url') . ' applies.</fg=green>');
     }
   }
@@ -53,7 +50,8 @@ class ValidatePatch extends PatchChooserBase {
    *   TRUE is patch applies, FALSE if patch does not, and NULL if something
    *   else occurs.
    */
-  protected function checkPatch(InputInterface $input, OutputInterface $output) {
+  protected function checkPatch(InputInterface $input, OutputInterface $output)
+  {
     $issue = $this->getIssue($input->getArgument('url'));
     if ($issue) {
       $patch = $this->choosePatch($issue, $input, $output);
@@ -89,7 +87,8 @@ class ValidatePatch extends PatchChooserBase {
    * @param array @repo_dir
    * @return array
    */
-  protected function ensureLatestRepo($repo_dir) {
+  protected function ensureLatestRepo($repo_dir)
+  {
     if (!$this->ensuredLatestRepo) {
       $wrapper = new GitWrapper();
       $git = $wrapper->workingCopy($repo_dir);
@@ -98,7 +97,8 @@ class ValidatePatch extends PatchChooserBase {
     }
   }
 
-  public function getOutput() {
+  public function getOutput()
+  {
     return $this->output;
   }
 }

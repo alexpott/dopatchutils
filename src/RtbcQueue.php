@@ -6,8 +6,8 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Url;
 use Symfony\Component\DomCrawler\Crawler;
 
-class RtbcQueue {
-
+class RtbcQueue
+{
   const DEFAULT_URI = 'https://drupal.org/project/issues/drupal?status=14&version=8.x&text=&priorities=All&categories=All&component=All&order=last_comment_timestamp&sort=asc';
 
   /**
@@ -19,7 +19,8 @@ class RtbcQueue {
 
   protected $nextPage = 0;
 
-  public function __construct($uri = NULL) {
+  public function __construct($uri = NULL)
+  {
     if (empty($uri)) {
       $uri = $this::DEFAULT_URI;
     }
@@ -33,7 +34,8 @@ class RtbcQueue {
    * @return array
    *   An array of d.o issue uris.
    */
-  public function getIssueUris () {
+  public function getIssueUris()
+  {
     if (empty($this->issueUris)) {
       while ($page = $this->getPage()) {
         $issues = $page->filter('table.project-issue td.views-field-title a');
@@ -42,6 +44,7 @@ class RtbcQueue {
         }
       }
     }
+
     return $this->issueUris;
   }
 
@@ -52,7 +55,8 @@ class RtbcQueue {
    *   A crawler object representing the next page or FALSE if there are no more
    *   pages.
    */
-  protected function getPage() {
+  protected function getPage()
+  {
     if ($this->nextPage === FALSE) {
       return FALSE;
     }
@@ -62,14 +66,14 @@ class RtbcQueue {
     $response = $request->send();
 
     // Set nextPage to FALSE if we've read the last page.
-    $crawler = new Crawler((string)$response->getBody());
+    $crawler = new Crawler((string) $response->getBody());
     $found = $crawler->filter('ul.pager li.pager-next a');
     if (!$found->count()) {
       $this->nextPage = FALSE;
-    }
-    else {
+    } else {
       $this->nextPage++;
     }
+
     return $crawler;
   }
 }

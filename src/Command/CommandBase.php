@@ -7,8 +7,8 @@ use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CommandBase extends Command {
-
+class CommandBase extends Command
+{
   /**
    * @var \DrupalPatchUtils\Config
    */
@@ -18,7 +18,8 @@ class CommandBase extends Command {
    * @param OutputInterface $output
    * @param $messages string|array
    */
-  protected function verbose (OutputInterface $output, $messages) {
+  protected function verbose(OutputInterface $output, $messages)
+  {
     if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
       $output->writeln($messages);
     }
@@ -28,7 +29,8 @@ class CommandBase extends Command {
    * @param $uri
    * @return Issue|bool
    */
-  protected function getIssue($uri) {
+  protected function getIssue($uri)
+  {
     try {
       return new Issue($uri);
     } catch (\Exception $e) {
@@ -44,22 +46,24 @@ class CommandBase extends Command {
    *
    * @return string
    */
-  protected function ask(OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
+  protected function ask(OutputInterface $output, $question, $default = '', $hidden_response = FALSE)
+  {
     // Need to choose patch.
     $dialog = $this->getDialog();
     if ($hidden_response) {
       $response = $dialog->askHiddenResponse($output, $question, $default);
-    }
-    else {
+    } else {
       $response = $dialog->ask($output, $question, $default);
     }
+
     return $response;
   }
 
   /**
    * @return \DrupalPatchUtils\Config
    */
-  protected function getConfig() {
+  protected function getConfig()
+  {
     if (!is_object($this->config)) {
       $this->config = new Config();
       $this->config->load();
@@ -71,7 +75,8 @@ class CommandBase extends Command {
   /**
    * @return \Symfony\Component\Console\Helper\DialogHelper
    */
-  protected function getDialog() {
+  protected function getDialog()
+  {
     $app = $this->getApplication();
 
     return $app->getHelperSet()->get('dialog');
@@ -83,7 +88,8 @@ class CommandBase extends Command {
    * @param bool $default
    * @return bool
    */
-  protected function askConfirmation(OutputInterface $output, $question, $default = FALSE) {
+  protected function askConfirmation(OutputInterface $output, $question, $default = FALSE)
+  {
     return $this->getDialog()->askConfirmation($output, $question, $default);
   }
 }

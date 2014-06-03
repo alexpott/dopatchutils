@@ -2,14 +2,13 @@
 
 namespace DrupalPatchUtils\Command;
 
-use Guzzle\Http\Client;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SearchIssuePatch extends PatchChooserBase {
-
+class SearchIssuePatch extends PatchChooserBase
+{
   protected function configure()
   {
     $this
@@ -48,8 +47,7 @@ class SearchIssuePatch extends PatchChooserBase {
         $contents = \file_get_contents($patch);
         if ($regex) {
           $found = preg_match($search_text, $contents);
-        }
-        else {
+        } else {
           $found = strpos($contents, $search_text);
         }
 
@@ -59,6 +57,5 @@ class SearchIssuePatch extends PatchChooserBase {
       }
     }
   }
-
 
 }
