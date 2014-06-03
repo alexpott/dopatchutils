@@ -69,6 +69,7 @@ class Configure extends Command {
     if (!is_dir($dir . '/modules') && !is_dir($dir . '/themes')) {
       throw new \InvalidArgumentException(sprintf('"%s" is not likely to be Drupal. There are no modules and themes directories.', $dir));
     }
+
     return $dir;
   }
 

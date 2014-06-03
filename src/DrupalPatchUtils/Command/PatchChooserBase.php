@@ -34,8 +34,7 @@ abstract class PatchChooserBase extends CommandBase {
     $patches_to_search = $issue->getLatestPatch();
     if (count($patches_to_search) > 1) {
       // Need to choose patch.
-      $app = $this->getApplication();
-      $dialog = $app->getHelperSet()->get('dialog');
+      $dialog = $this->getDialog();
       $output->writeln('Multiple patches detected:');
       $output->writeln($this->getChoices($patches_to_search));
 
@@ -73,6 +72,7 @@ abstract class PatchChooserBase extends CommandBase {
         $value .= ' (default)';
       }
       $counter++;
+
       return $value;
     }, $patches_to_search);
   }
