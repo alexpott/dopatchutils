@@ -15,6 +15,8 @@ class Issue
      * @var string
      */
     protected $uri;
+    protected $html;
+    protected $crawler;
 
     /**
      * @param string $issue_id NID or URI of an issue.

@@ -9,6 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandBase extends Command
 {
+    const COMMAND_SUCCESS = 0;
+    const COMMAND_FAILURE = 1;
+
     /**
      * @var \DrupalPatchUtils\Config
      */
@@ -26,7 +29,7 @@ class CommandBase extends Command
     }
 
     /**
-     * @param $uri
+     * @param string $uri
      * @return Issue|bool
      */
     protected function getIssue($uri)
@@ -46,9 +49,8 @@ class CommandBase extends Command
      *
      * @return string
      */
-    protected function ask(OutputInterface $output, $question, $default = '', $hidden_response = FALSE)
+    protected function ask(OutputInterface $output, $question, $default = '', $hidden_response = false)
     {
-        // Need to choose patch.
         $dialog = $this->getDialog();
         if ($hidden_response) {
             $response = $dialog->askHiddenResponse($output, $question, $default);
@@ -84,7 +86,7 @@ class CommandBase extends Command
 
     /**
      * @param OutputInterface $output
-     * @param $question
+     * @param string $question
      * @param bool $default
      *
      * @return bool

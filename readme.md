@@ -14,7 +14,6 @@ This will prompt the user to provide a path to a valid drupal check out.
 
 ### validateRtbcPatches
 
-
 ```bash
 php bin/dop validateRtbcPatches
 ```

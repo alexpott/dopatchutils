@@ -48,5 +48,7 @@ class SearchRtbcPatchesCommand extends SearchIssuePatchCommand
             $progress->advance();
         }
         $progress->finish();
+
+        return self::COMMAND_SUCCESS;
     }
 }

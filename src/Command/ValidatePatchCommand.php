@@ -42,6 +42,8 @@ class ValidatePatchCommand extends PatchChooserBase
         } else {
             $output->writeln('<fg=green>' . $this->patch . ' on ' . $input->getArgument('url') . ' applies.</fg=green>');
         }
+
+        return self::COMMAND_SUCCESS;
     }
 
     /**

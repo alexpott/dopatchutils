@@ -24,7 +24,7 @@ class Config
     protected $loaded = false;
 
     /**
-     * @return \DrupalPatchUtils\Config $this
+     * @return \DrupalPatchUtils\Config
      */
     public function load()
     {
@@ -62,7 +62,7 @@ class Config
     public function getDrupalRepoDir()
     {
         if (empty($this->drupalRepoDir)) {
-            throw new \InvalidArgumentException('No Drupal repository configured. Run ./dop configure first.');
+            throw new \InvalidArgumentException('No Drupal repository configured. Run php bin/dop configure first.');
         }
 
         return $this->drupalRepoDir;
@@ -71,7 +71,7 @@ class Config
     public function getDrupalUser()
     {
         if (empty($this->drupalUser)) {
-            throw new \InvalidArgumentException('No Drupal user configured. Run ./dop configure first.');
+            throw new \InvalidArgumentException('No Drupal user configured. Run php bin/dop configure first.');
         }
 
         return $this->drupalUser;
@@ -80,7 +80,7 @@ class Config
     public function getCacheDir()
     {
         if (empty($this->cacheDir)) {
-            throw new \InvalidArgumentException('No cache dir configured. Run ./dop configure first.');
+            throw new \InvalidArgumentException('No cache dir configured. Run php bin/dop configure first.');
         }
 
         return $this->cacheDir;

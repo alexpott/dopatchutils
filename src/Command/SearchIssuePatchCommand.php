@@ -44,7 +44,7 @@ class SearchIssuePatchCommand extends PatchChooserBase
                     $output->writeln('Searching ' . $patch);
                 }
                 $patch = $this->getPatch($patch);
-                $contents = \file_get_contents($patch);
+                $contents = file_get_contents($patch);
                 if ($regex) {
                     $found = preg_match($search_text, $contents);
                 } else {
@@ -56,5 +56,7 @@ class SearchIssuePatchCommand extends PatchChooserBase
                 }
             }
         }
+
+        self::COMMAND_SUCCESS;
     }
 }

@@ -70,5 +70,7 @@ class ValidateRtbcPatchesCommand extends ValidatePatchCommand
         } else {
             $output->writeln('<fg=green>All patches apply</fg=green>');
         }
+
+        return self::COMMAND_SUCCESS;
     }
 }

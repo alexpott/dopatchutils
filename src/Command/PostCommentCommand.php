@@ -19,7 +19,8 @@ class PostCommentCommand extends CommandBase
                 'url',
                 InputArgument::REQUIRED,
                 'What is the url of the issue to retrieve?'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -50,5 +51,7 @@ class PostCommentCommand extends CommandBase
             // var_dump($comment);
             // var_dump($comment_form);
         }
+
+        return self::COMMAND_SUCCESS;
     }
 }

@@ -26,7 +26,7 @@ class ConfigureCommand extends CommandBase
             $default = false;
         }
 
-        $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", array($this, 'validateCacheDir'), false, $default);
+        $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", [$this, 'validateCacheDir'], false, $default);
 
         try {
             $default = $config->getDrupalRepoDir();
@@ -34,7 +34,7 @@ class ConfigureCommand extends CommandBase
             $default = false;
         }
 
-        $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), false, $default);
+        $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", [$this, 'validateDrupalRepo'], false, $default);
 
         try {
             $default = $config->getDrupalUser();
@@ -50,6 +50,8 @@ class ConfigureCommand extends CommandBase
             ->setDrupalUser($douser)
             ->write()
         ;
+
+        return self::COMMAND_SUCCESS;
     }
 
     public function validateDrupalRepo($dir)

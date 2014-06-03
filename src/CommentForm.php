@@ -42,6 +42,11 @@ class CommentForm
         return $this;
     }
 
+    /**
+     * @param string $text
+     *
+     * @return CommentForm
+     */
     public function setCommentText($text)
     {
         $comment = $this->form->get('nodechanges_comment_body[value]');
@@ -72,6 +77,7 @@ class CommentForm
 
     /**
      * @param integer $value
+     *
      * @return CommentForm
      */
     protected function setStatus($value)
