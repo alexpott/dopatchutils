@@ -11,14 +11,10 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Issue;
 use Guzzle\Http\Client;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class PatchChooserBase extends CommandBase {
-
-  //protected $issue;
 
   /**
    * The name of the patch.
@@ -47,6 +43,7 @@ abstract class PatchChooserBase extends CommandBase {
         if (!in_array($patch_key, range(0 ,count($patches_to_search)))) {
           throw new \InvalidArgumentException(sprintf('Choice "%s" is invalid.', $patch_key));
         }
+
         return $patch_key;
       }, false, 1);
       $patch = $patches_to_search[$patch_key - 1];
@@ -58,6 +55,7 @@ abstract class PatchChooserBase extends CommandBase {
       // Nothing to do.
       $output->writeln("No patches available on ". $issue->getUri());
     }
+
     return $patch;
   }
 
