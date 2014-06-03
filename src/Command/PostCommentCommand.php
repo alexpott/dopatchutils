@@ -12,7 +12,7 @@ class PostCommentCommand extends CommandBase
     protected function configure()
     {
         $this
-            ->setName('postComment')
+            ->setName('post-comment')
             ->setAliases(['pc'])
             ->setDescription('Posts comment to d.o.')
             ->addArgument(

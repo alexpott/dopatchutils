@@ -12,7 +12,7 @@ class SearchIssuePatchCommand extends PatchChooserBase
     protected function configure()
     {
         $this
-            ->setName('searchIssuePatch')
+            ->setName('search-issue-patch')
             ->setDescription('Searches a d.o drupal 8 issue patch for text')
             ->addArgument(
                 'url',

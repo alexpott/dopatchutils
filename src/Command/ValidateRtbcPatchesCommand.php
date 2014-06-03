@@ -14,7 +14,7 @@ class ValidateRtbcPatchesCommand extends ValidatePatchCommand
     protected function configure()
     {
         $this
-            ->setName('validateRtbcPatches')
+            ->setName('validate-rtbc-patches')
             ->setDescription('Checks RTBC patches still apply')
             ->addOption(
                 'mark-needs-work',

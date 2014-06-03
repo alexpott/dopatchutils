@@ -22,7 +22,7 @@ class ValidatePatchCommand extends PatchChooserBase
     protected function configure()
     {
         $this
-            ->setName('validatePatch')
+            ->setName('validate-patch')
             ->setDescription('Checks that the latest patch on an issue still applies')
             ->addArgument(
                 'url',

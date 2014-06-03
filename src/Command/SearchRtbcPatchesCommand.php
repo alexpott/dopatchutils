@@ -13,7 +13,7 @@ class SearchRtbcPatchesCommand extends SearchIssuePatchCommand
     protected function configure()
     {
         $this
-            ->setName('searchRtbcPatches')
+            ->setName('search-rtbc-patches')
             ->setDescription('Searches RTBC patches for text')
             ->addArgument(
                 'searchText',
