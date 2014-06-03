@@ -48,7 +48,7 @@ class ValidatePatch extends PatchChooserBase
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return bool|null
-     *   TRUE is patch applies, FALSE if patch does not, and NULL if something
+     *   true is patch applies, false if patch does not, and NULL if something
      *   else occurs.
      */
     protected function checkPatch(InputInterface $input, OutputInterface $output)
@@ -69,7 +69,7 @@ class ValidatePatch extends PatchChooserBase
                 if ($process->isSuccessful()) {
                     $this->output = $process->getOutput();
 
-                    return TRUE;
+                    return true;
                 }
 
                 $this->output = $process->getErrorOutput();

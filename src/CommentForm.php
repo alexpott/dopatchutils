@@ -33,7 +33,7 @@ class CommentForm
     }
 
     /**
-     * @return $this
+     * @return CommentForm
      */
     public function setStatusNeedsWork()
     {
@@ -71,7 +71,7 @@ class CommentForm
 
     /**
      * @param integer $value
-     * @return $this
+     * @return CommentForm
      */
     protected function setStatus($value)
     {
@@ -81,5 +81,4 @@ class CommentForm
 
         return $this;
     }
-
 }

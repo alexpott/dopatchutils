@@ -27,6 +27,7 @@ class Issue
         } elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
             $this->uri = $issue_id;
         }
+
         $this->getIssue();
     }
 

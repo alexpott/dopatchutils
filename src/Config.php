@@ -85,18 +85,16 @@ class Config
         }
 
         return $this->cacheDir;
-
     }
 
     public function write()
     {
-        $config = array(
+        $config = [
             'cache_dir' => $this->cacheDir,
             'drupal_repository_dir' => $this->drupalRepoDir,
             'drupal_user' => $this->drupalUser,
-        );
-        $yaml = new Yaml();
-        file_put_contents($this->getConfigFilename(), $yaml->dump($config));
+        ];
+        file_put_contents($this->getConfigFilename(), Yaml::dump($config));
 
         return $this;
     }

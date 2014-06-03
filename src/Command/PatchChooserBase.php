@@ -24,7 +24,7 @@ abstract class PatchChooserBase extends CommandBase
      */
     protected function choosePatch(Issue $issue, InputInterface $input, OutputInterface $output)
     {
-        $patch = FALSE;
+        $patch = false;
         $patches_to_search = $issue->getLatestPatch();
         if (count($patches_to_search) > 1) {
             // Need to choose patch.

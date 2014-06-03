@@ -2,7 +2,6 @@
 
 namespace DrupalPatchUtils\Command;
 
-use DrupalPatchUtils\Config;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
