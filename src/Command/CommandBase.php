@@ -86,6 +86,7 @@ class CommandBase extends Command
      * @param OutputInterface $output
      * @param $question
      * @param bool $default
+     *
      * @return bool
      */
     protected function askConfirmation(OutputInterface $output, $question, $default = false)

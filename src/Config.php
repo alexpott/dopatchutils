@@ -101,6 +101,6 @@ class Config
 
     protected function getConfigFilename()
     {
-        return __DIR__ . '/../../config/app.yml';
+        return __DIR__ . '/../config/app.yml';
     }
 }
