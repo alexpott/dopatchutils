@@ -14,12 +14,10 @@ class RtbcQueue
      * @var \Guzzle\Http\Url
      */
     protected $uri;
-
-    protected $issueUris = array();
-
+    protected $issueUris = [];
     protected $nextPage = 0;
 
-    public function __construct($uri = NULL)
+    public function __construct($uri = null)
     {
         if (empty($uri)) {
             $uri = $this::DEFAULT_URI;

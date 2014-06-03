@@ -17,7 +17,7 @@ class DoBrowser
     {
         $crawler = $this->client->request('GET', 'https://drupal.org/user/');
         $form = $crawler->selectButton('Log in')->form();
-        $this->client->submit($form, array('name' => $user, 'pass' => $pass));
+        $this->client->submit($form, ['name' => $user, 'pass' => $pass]);
     }
 
     /**

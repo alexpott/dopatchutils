@@ -42,11 +42,11 @@ class ValidateRtbcPatches extends ValidatePatch
         $progress->start($output, count($issues));
         foreach ($issues as $item) {
             $input->setArgument('url', $item);
-            // Ignore NULL return where checkPatch() is unable to determine if patch
+            // Ignore null return where checkPatch() is unable to determine if patch
             // applies or not. This normally occurs because the issue does not have
             // a patch.
-            if ($this->checkPatch($input, $output) === FALSE) {
-                $failed_patches[] = array('issue' => $item, 'patch' => $this->getPatchName(), 'output' => $this->getOutput());
+            if ($this->checkPatch($input, $output) === false) {
+                $failed_patches[] = ['issue' => $item, 'patch' => $this->getPatchName(), 'output' => $this->getOutput()];
             }
             $progress->advance();
         }
@@ -55,7 +55,7 @@ class ValidateRtbcPatches extends ValidatePatch
             return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';
         }, $failed_patches));
 
-        if (count($failed_patches) && $input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
+        if (count($failed_patches) && $input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', false)) {
             $browser = new DoBrowser();
             $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', true));
             foreach ($failed_patches as $item) {
@@ -71,5 +71,4 @@ class ValidateRtbcPatches extends ValidatePatch
             $output->writeln('<fg=green>All patches apply</fg=green>');
         }
     }
-
 }
