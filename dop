@@ -4,6 +4,8 @@
 require './vendor/autoload.php';
 
 use DrupalPatchUtils\Command\Configure;
+use DrupalPatchUtils\Command\CreateIssue;
+use DrupalPatchUtils\Command\Login;
 use DrupalPatchUtils\Command\PostComment;
 use DrupalPatchUtils\Command\SearchIssuePatch;
 use DrupalPatchUtils\Command\SearchRtbcPatches;
@@ -15,8 +17,10 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 $application->add(new Configure());
 $application->add(new PostComment());
+$application->add(new CreateIssue());
 $application->add(new SearchIssuePatch());
 $application->add(new SearchRtbcPatches());
 $application->add(new ValidatePatch());
 $application->add(new ValidateRtbcPatches());
+$application->add(new Login());
 $application->run();

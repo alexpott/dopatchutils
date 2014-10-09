@@ -10,13 +10,28 @@
 namespace DrupalPatchUtils;
 
 use Goutte\Client;
+use Guzzle\Plugin\Cookie\CookieJar\FileCookieJar;
+use Guzzle\Plugin\Cookie\CookiePlugin;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 
 class DoBrowser {
 
+  /** @var \Goutte\Client */
+  protected $client;
+
   public function __construct() {
     // No point using a cache as d.o emits headers with a max-age=0.
     $this->client = new Client();
+
+    // Add the cooke plugin from guzzle to ensure that the cookie is stored.
+    $guzzle_client = $this->getClient()->getClient();
+    $cookie_plugin = new CookiePlugin(new FileCookieJar($this->ensureCookieFilepath()));
+    $guzzle_client->addSubscriber($cookie_plugin);
+  }
+
+  public function loggedIn() {
+
   }
 
   public function login($user, $pass) {
@@ -32,6 +47,7 @@ class DoBrowser {
         throw new \Exception("Login to drupal.org failed.");
       }
     }
+    return $crawler;
   }
 
   /**
@@ -70,4 +86,13 @@ class DoBrowser {
   public function getClient() {
     return $this->client;
   }
+
+  protected function ensureCookieFilepath() {
+    $filepath = sys_get_temp_dir() . '/dopathutils';
+    if (!file_exists($filepath)) {
+      touch($filepath);
+    }
+    return $filepath;
+  }
+
 }
