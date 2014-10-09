@@ -43,8 +43,25 @@ class DoBrowser {
     return new CommentForm($crawler->selectButton('Save')->form());
   }
 
-  public function submitForm (Form $form) {
-    $this->client->submit(($form));
+  public function getIssueForm($project) {
+    $uri = 'https://drupal.org/' . 'node/add/project-issue/' . $project;
+    $crawler = $this->client->request('GET', $uri);
+    return new ProjectForm($crawler->selectButton('Save')->form());
+  }
+
+  public function getErrors(Crawler $crawler) {
+    $login_errors = $crawler->filter('.messages.error');
+    $errors = [];
+    if ($login_errors->count() > 0) {
+      foreach ($login_errors as $login_error) {
+        $errors[] = $login_error->nodeValue;
+      }
+    }
+    return $errors;
+  }
+
+  public function submitForm(Form $form) {
+    return $this->client->submit(($form));
   }
 
   /**
