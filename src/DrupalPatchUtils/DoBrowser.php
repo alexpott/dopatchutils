@@ -21,8 +21,17 @@ class DoBrowser {
 
   public function login($user, $pass) {
     $crawler = $this->client->request('GET', 'https://drupal.org/user/');
-    $form = $crawler->selectButton('Log in')->form();
-    $this->client->submit($form, array('name' => $user, 'pass' => $pass));
+    // Check if already logged in.
+    if (($select_button = $crawler->selectButton('Log in')) && $select_button->count()) {
+      $form = $select_button->form();
+
+      $crawler = $this->client->submit($form, array('name' => $user, 'pass' => $pass));
+      $login_errors = $crawler->filter('.messages-error');
+      if ($login_errors->count() > 0) {
+        print_r($login_errors);
+        throw new \Exception("Login to drupal.org failed.");
+      }
+    }
   }
 
   /**
