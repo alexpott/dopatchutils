@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c749b41454f3ce2d124ed82b612f8c79",
+    "hash": "cbdb7a053f0bb572d4dbbc3113f05ec6",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -37,7 +37,8 @@
             "authors": [
                 {
                     "name": "Chris Pliakas",
-                    "email": "opensource@chrispliakas.com"
+                    "email": "opensource@chrispliakas.com",
+                    "role": "Project lead"
                 }
             ],
             "description": "A command line wrapper aroung Git.",
@@ -247,6 +248,55 @@
                 "url"
             ],
             "time": "2013-10-24 00:04:09"
+        },
+        {
+            "name": "guzzle/plugin-cookie",
+            "version": "v3.8.1",
+            "target-dir": "Guzzle/Plugin/Cookie",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/plugin-cookie.git",
+                "reference": "4278cee58d6beeb9bba2c503c2a07a0f41b13677"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/plugin-cookie/zipball/4278cee58d6beeb9bba2c503c2a07a0f41b13677",
+                "reference": "4278cee58d6beeb9bba2c503c2a07a0f41b13677",
+                "shasum": ""
+            },
+            "require": {
+                "guzzle/http": "self.version",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Guzzle\\Plugin\\Cookie": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle cookie plugin",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "plugin"
+            ],
+            "time": "2014-01-23 18:29:07"
         },
         {
             "name": "guzzle/stream",

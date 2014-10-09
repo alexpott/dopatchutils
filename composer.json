@@ -5,7 +5,8 @@
            "symfony/console": "v2.4.1",
            "symfony/css-selector": "v2.4.1",
            "symfony/dom-crawler": "2.5.*@dev",
-           "symfony/yaml": "v2.4.1"
+           "symfony/yaml": "v2.4.1",
+           "guzzle/plugin-cookie": "*"
     },
     "autoload": {
         "psr-0": {
