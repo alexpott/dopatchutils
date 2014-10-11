@@ -30,8 +30,16 @@ class DoBrowser {
     $guzzle_client->addSubscriber($cookie_plugin);
   }
 
+  /**
+   * Determines whether the user is already logged in.
+   *
+   * @return bool
+   */
   public function loggedIn() {
+    $crawler = $this->client->request('GET', 'https://drupal.org/user/');
 
+    $log_in_button = $crawler->selectButton('Log in');
+    return $log_in_button->count() == 0;
   }
 
   public function login($user, $pass) {

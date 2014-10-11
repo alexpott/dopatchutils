@@ -37,7 +37,9 @@ class CreateIssue extends CommandBase {
     }
 
     $browser = new DoBrowser();
-    $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+    if (!$browser->loggedIn()) {
+      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+    }
 
     $project = $input->getArgument('project');
     $project_form = $browser->getIssueForm($project);
@@ -63,7 +65,7 @@ class CreateIssue extends CommandBase {
 
     // Ensure that honeypot doesn't block the request.
     // @TODO find the minimal required value.
-    $seconds = 10;
+    $seconds = 20;
     while ($seconds--) {
       $output->write(sprintf("\rWait %s seconds for honeypot", $seconds));
       sleep(1);
