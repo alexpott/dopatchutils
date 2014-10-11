@@ -64,7 +64,7 @@ class Configure extends Command {
     catch (\Exception $e) {
       $default = 20;
     }
-    $honeypot_sleep_time = $dialog->ask($output, "Enter honeypot sleep time: ", $default);
+    $honeypot_sleep_time = $dialog->ask($output, "Enter honeypot sleep time: ($default)", $default);
 
     $config
       ->setCacheDir($cache_dir)
