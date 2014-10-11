@@ -61,6 +61,15 @@ class CreateIssue extends CommandBase {
     $body_text = $dialog->ask($output, 'Enter body: ', 'TODO');
     $project_form->setBody($body_text);
 
+    // Ensure that honeypot doesn't block the request.
+    // @TODO find the minimal required value.
+    $seconds = 10;
+    while ($seconds--) {
+      $output->write(sprintf("\rWait %s seconds for honeypot", $seconds));
+      sleep(1);
+    }
+    $output->write("\n");
+
     $crawler = $browser->submitForm($project_form->getForm());
 
     if ($errors = $browser->getErrors($crawler)) {
