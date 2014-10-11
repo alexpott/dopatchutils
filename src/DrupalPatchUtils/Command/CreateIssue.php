@@ -65,7 +65,7 @@ class CreateIssue extends CommandBase {
 
     // Ensure that honeypot doesn't block the request.
     // @TODO find the minimal required value.
-    $seconds = 20;
+    $seconds = $this->getConfig()->getHoneypotSleepTime();
     while ($seconds--) {
       $output->write(sprintf("\rWait %s seconds for honeypot", $seconds));
       sleep(1);

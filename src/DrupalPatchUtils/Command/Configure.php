@@ -32,6 +32,8 @@ class Configure extends Command {
     $config = new Config();
     $config->load();
     $app = $this->getApplication();
+
+    /** @var \Symfony\Component\Console\Helper\DialogHelper $dialog */
     $dialog = $app->getHelperSet()->get('dialog');
     try {
       $default = $config->getCacheDir();
@@ -56,10 +58,19 @@ class Configure extends Command {
     }
     $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
 
+    try {
+      $default = $config->getHoneypotSleepTime();
+    }
+    catch (\Exception $e) {
+      $default = 20;
+    }
+    $honeypot_sleep_time = $dialog->ask($output, "Enter honeypot sleep time: ", $default);
+
     $config
       ->setCacheDir($cache_dir)
       ->setDrupalRepoDir($repo_dir)
       ->setDrupalUser($douser)
+      ->setHoneypotSleepTime($honeypot_sleep_time)
       ->write();
   }
 
