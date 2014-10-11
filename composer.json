@@ -6,6 +6,8 @@
            "symfony/css-selector": "v2.4.1",
            "symfony/dom-crawler": "2.5.*@dev",
            "symfony/yaml": "v2.4.1",
+           "symfony/filesystem": "2.4.1",
+           "symfony/process": "2.5.5",
            "guzzle/plugin-cookie": "*"
     },
     "autoload": {
