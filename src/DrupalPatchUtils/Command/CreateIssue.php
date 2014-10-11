@@ -59,9 +59,9 @@ class CreateIssue extends CommandBase {
     $title = $dialog->ask($output, 'Enter title: ');
     $project_form->setTitle($title);
 
-    $components = ['Code' => 'Code', 'Documentation' => 'Documentation', 'Miscellaneous' => 'Miscellaneous', 'User interface' => 'User interface'];
+    $components = $project_form->getComponents();
     $component = $dialog->select($output, 'Select component: ', $components, 'Code');
-    $project_form->setComponent($component);
+    $project_form->setComponent($components[$component]);
 
     $categories = [1 => 'Bug report', 2 => 'Task', 3 => 'Feature request', 4 => 'Support request'];
     $category = $dialog->select($output, 'Select category: ', $categories, 2);

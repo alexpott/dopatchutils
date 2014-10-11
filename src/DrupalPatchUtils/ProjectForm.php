@@ -7,6 +7,8 @@
 
 namespace DrupalPatchUtils;
 
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+
 class ProjectForm extends DoFormBase {
 
   public function setTitle($title) {
@@ -14,6 +16,17 @@ class ProjectForm extends DoFormBase {
     $title_form->setValue($title);
     $this->form->set($title_form);
     return $this;
+  }
+
+  /**
+   * Returns the list of available components.
+   *
+   * @return array
+   */
+  public function getComponents() {
+    /** @var ChoiceFormField $component_form */
+    $component_form = $this->form->get('field_issue_component[und]');
+    return $component_form->availableOptionValues();
   }
 
   public function setComponent($component) {
