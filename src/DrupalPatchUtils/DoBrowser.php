@@ -58,6 +58,12 @@ class DoBrowser {
     return $crawler;
   }
 
+  public function logout() {
+    if ($this->loggedIn()) {
+      $this->client->request('GET', 'https://drupal.org/user/logout');
+    }
+  }
+
   /**
    * @param string $issue_uri
    * @return \DrupalPatchUtils\CommentForm
