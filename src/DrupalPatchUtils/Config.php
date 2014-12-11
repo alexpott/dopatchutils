@@ -29,6 +29,11 @@ class Config {
    */
   protected $cacheDir;
 
+  /**
+   * @var int
+   */
+  protected $honeypotSleepTime;
+
   protected $loaded = FALSE;
 
   /**
@@ -41,6 +46,7 @@ class Config {
       $this->drupalRepoDir = isset($config['drupal_repository_dir']) ? $config['drupal_repository_dir'] : '';
       $this->drupalUser = isset($config['drupal_user']) ? $config['drupal_user'] : '';
       $this->cacheDir = isset($config['cache_dir']) ? $config['cache_dir'] : '';
+      $this->honeypotSleepTime = isset($config['honeypot_sleep_time']) ? $config['honeypot_sleep_time'] : NULL;
     }
     return $this;
   }
@@ -57,6 +63,11 @@ class Config {
 
   public function setDrupalUser($name) {
     $this->drupalUser = $name;
+    return $this;
+  }
+
+  public function setHoneypotSleepTime($seconds) {
+    $this->honeypotSleepTime = $seconds;
     return $this;
   }
 
@@ -82,12 +93,19 @@ class Config {
 
   }
 
+  public function getHoneypotSleepTime() {
+    if ($this->honeypotSleepTime === NULL) {
+      throw new \InvalidArgumentException('No cache dir configured. Run ./dop configure first.');
+    }
+    return $this->honeypotSleepTime;
+  }
 
   public function write() {
     $config = array(
       'cache_dir' => $this->cacheDir,
       'drupal_repository_dir' => $this->drupalRepoDir,
       'drupal_user' => $this->drupalUser,
+      'honeypot_sleep_time' => $this->honeypotSleepTime,
     );
     $yaml = new Yaml();
     file_put_contents($this->getConfigFilename(), $yaml->dump($config));
