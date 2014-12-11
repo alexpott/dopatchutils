@@ -40,7 +40,7 @@ class CreateIssue extends CommandBase {
   protected function execute(InputInterface $input, OutputInterface $output)
   {
     if (!$output instanceof ConsoleOutputInterface) {
-      throw new \Exception('console output needed.');
+      throw new \Exception('Console output needed.');
     }
 
     $browser = new DoBrowser();
@@ -59,12 +59,17 @@ class CreateIssue extends CommandBase {
     $title = $dialog->ask($output, 'Enter title: ');
     $project_form->setTitle($title);
 
+    // Limit the list of allowed values.
+    $versions = array_slice($project_form->getVersions(), 0, 5);
+    $version = $dialog->select($output, 'Select version: ', $versions);
+    $project_form->setVersion($versions[$version]);
+
     $components = $project_form->getComponents();
-    $component = $dialog->select($output, 'Select component: ', $components, 'Code');
+    $component = $dialog->select($output, 'Select component: ', $components);
     $project_form->setComponent($components[$component]);
 
     $categories = [1 => 'Bug report', 2 => 'Task', 3 => 'Feature request', 4 => 'Support request'];
-    $category = $dialog->select($output, 'Select category: ', $categories, 2);
+    $category = $dialog->select($output, 'Select category: (Task) ', $categories, 2);
     $project_form->setCategory($category);
 
     // Allow to input the main body either via an editor or in the shell.

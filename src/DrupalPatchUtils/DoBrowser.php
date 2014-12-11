@@ -76,7 +76,7 @@ class DoBrowser {
   public function getIssueForm($project) {
     $uri = 'https://drupal.org/' . 'node/add/project-issue/' . $project;
     $crawler = $this->client->request('GET', $uri);
-    return new ProjectForm($crawler->selectButton('Save')->form());
+    return new IssueForm($crawler->selectButton('Save')->form());
   }
 
   public function getErrors(Crawler $crawler) {
