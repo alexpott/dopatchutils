@@ -7,6 +7,7 @@
 
 namespace DrupalPatchUtils;
 
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Form;
 
 class DoFormBase {
@@ -60,14 +61,59 @@ class DoFormBase {
   public function getForm () {
     return $this->form;
   }
+
   /**
    * @param integer $value
+   *
    * @return $this
    */
-  protected function setStatus($value) {
+  public function setStatus($value) {
     $status = $this->form->get('field_issue_status[und]');
     $status->setValue($value);
     $this->form->set($status);
+    return $this;
+  }
+
+  /**
+   * Returns the list of available components.
+   *
+   * @return array
+   */
+  public function getComponents() {
+    /** @var ChoiceFormField $component_form */
+    $component_form = $this->form->get('field_issue_component[und]');
+    return $component_form->availableOptionValues();
+  }
+
+  public function setComponent($component) {
+    $component_form = $this->form->get('field_issue_component[und]');
+    $component_form->setValue($component);
+    $this->form->set($component_form);
+    return $this;
+  }
+
+  /**
+   * Returns the list of available versions.
+   *
+   * @return string[]
+   */
+  public function getVersions() {
+    /** @var ChoiceFormField $version_form */
+    $version_form = $this->form->get('field_issue_version[und]');
+    return $version_form->availableOptionValues();
+  }
+
+  public function setVersion($version) {
+    $version_form = $this->form->get('field_issue_version[und]');
+    $version_form->setValue($version);
+    $this->form->set($version_form);
+    return $this;
+  }
+
+  public function setCategory($category) {
+    $category_form = $this->form->get('field_issue_category[und]');
+    $category_form->setValue($category);
+    $this->form->set($category_form);
     return $this;
   }
 
