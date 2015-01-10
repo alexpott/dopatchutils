@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Config;
+use DrupalPatchUtils\DoBrowser;
 use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -90,4 +91,19 @@ class CommandBase extends Command {
   protected function askConfirmation (OutputInterface $output, $question, $default = FALSE) {
     return $this->getDialog()->askConfirmation($output, $question, $default);
   }
+
+  /**
+   * Ensure that the user is logged in.
+   *
+   * @param \DrupalPatchUtils\DoBrowser $browser
+   *   The d.o. browser
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   *   The output.
+   */
+  protected function ensureUserIsLoggedIn(DoBrowser $browser, OutputInterface $output) {
+    if (!$browser->loggedIn()) {
+      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+    }
+  }
+
 }
