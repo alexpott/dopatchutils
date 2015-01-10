@@ -117,5 +117,34 @@ class DoFormBase {
     return $this;
   }
 
+  /**
+   * Returns the list of tags separated.
+   *
+   * @return string[]
+   */
+  public function getTags() {
+    $tag_form = $this->form->get('taxonomy_vocabulary_9[und]');
+    $tags = $tag_form->getValue();
+    $tags = explode(', ', $tags);
+
+    return $tags;
+  }
+
+  /**
+   * Sets the tags of an issue.
+   *
+   * @param string[] $tags
+   *   The tags as array.
+   *
+   * @return $this
+   */
+  public function setTags(array $tags) {
+    $tag_form = $this->form->get('taxonomy_vocabulary_9[und]');
+
+    $tag_form->setValue(implode(', ', $tags));
+
+    return $this;
+  }
+
 }
 
