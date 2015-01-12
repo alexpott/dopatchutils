@@ -36,14 +36,14 @@ class DoBrowser {
    * @return bool
    */
   public function loggedIn() {
-    $crawler = $this->client->request('GET', 'https://drupal.org/user/');
+    $crawler = $this->client->request('GET', 'https://www.drupal.org/user/');
 
     $log_in_button = $crawler->selectButton('Log in');
     return $log_in_button->count() == 0;
   }
 
   public function login($user, $pass) {
-    $crawler = $this->client->request('GET', 'https://drupal.org/user/');
+    $crawler = $this->client->request('GET', 'https://www.drupal.org/user/');
     // Check if already logged in.
     if (($select_button = $crawler->selectButton('Log in')) && $select_button->count()) {
       $form = $select_button->form();
@@ -60,7 +60,7 @@ class DoBrowser {
 
   public function logout() {
     if ($this->loggedIn()) {
-      $this->client->request('GET', 'https://drupal.org/user/logout');
+      $this->client->request('GET', 'https://www.drupal.org/user/logout');
     }
   }
 
@@ -74,7 +74,7 @@ class DoBrowser {
   }
 
   public function getIssueForm($project) {
-    $uri = 'https://drupal.org/' . 'node/add/project-issue/' . $project;
+    $uri = 'https://www.drupal.org/node/add/project-issue/' . $project;
     $crawler = $this->client->request('GET', $uri);
     return new IssueForm($crawler->selectButton('Save')->form());
   }

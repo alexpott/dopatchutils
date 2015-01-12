@@ -57,17 +57,19 @@ class ValidateRtbcPatches extends ValidatePatch {
       $progress->advance();
     }
     $progress->finish();
-    $output->writeln(array_map(function ($value) {return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';}, $failed_patches));
 
-    if (count($failed_patches) && $input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
-      $browser = new DoBrowser();
-      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-      foreach ($failed_patches as $item) {
-        $comment_form = $browser->getCommentForm($item['issue']);
-        $comment_form->setStatusNeedsWork();
-        $comment_form->setCommentText($item['patch'] . " no longer applies.\n<code>\n" . $item['output']. "\n</code>");
-        $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
-        $browser->submitForm($comment_form->getForm());
+    if (count($failed_patches)) {
+      $output->writeln(array_map(function ($value) {return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';}, $failed_patches));
+      if ($input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
+        $browser = new DoBrowser();
+        $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+        foreach ($failed_patches as $item) {
+          $comment_form = $browser->getCommentForm($item['issue']);
+          $comment_form->setStatusNeedsWork();
+          $comment_form->setCommentText($item['patch'] . " no longer applies.\n<code>\n" . $item['output']. "\n</code>");
+          $comment_form->ensureTag($comment_form::TAG_NEEDS_REROLL);
+          $browser->submitForm($comment_form->getForm());
+        }
       }
     }
     else {

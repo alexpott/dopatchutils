@@ -22,7 +22,7 @@ class Issue {
    */
   public function __construct($issue_id) {
     if (is_numeric($issue_id)) {
-      $this->uri = 'https://drupal.org/node/' . $issue_id;
+      $this->uri = 'https://www.drupal.org/node/' . $issue_id;
     }
     elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
       $this->uri = $issue_id;
