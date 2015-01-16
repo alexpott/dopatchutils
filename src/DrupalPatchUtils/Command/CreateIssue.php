@@ -9,6 +9,7 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\DoBrowser;
 use DrupalPatchUtils\IssueSummaryTemplate;
+use DrupalPatchUtils\TextEditor;
 use DrupalPatchUtils\Uuid;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -72,21 +73,8 @@ class CreateIssue extends CommandBase {
 
     // Allow to input the main body either via an editor or in the shell.
     if ($input->getOption('editor')) {
-      $temp_file = '/tmp/' . Uuid::generate() . ".txt";
-      $filesystem = new Filesystem();
-      $filesystem->touch($temp_file);
-      $filesystem->dumpFile($temp_file, IssueSummaryTemplate::BODY);
-
-      $process = new Process(sprintf('vi %s', $temp_file), NULL, NULL, NULL, 3600);
-
-      $process->setTty(TRUE);
-      $process->start();
-      $process->wait();
-
-      $output->writeln($process->getOutput());
-      $output->writeln($process->getErrorOutput());
-
-      $body_text = file_get_contents($temp_file);
+      $editor = new TextEditor();
+      $body_text = $editor->editor($output, IssueSummaryTemplate::BODY);
     }
     else {
       $body_text = $dialog->ask($output, 'Enter body: ', 'TODO');
@@ -114,5 +102,6 @@ class CreateIssue extends CommandBase {
     }
     return;
   }
+
 
 }
