@@ -74,6 +74,14 @@ class DoFormBase {
     return $this;
   }
 
+  public function getStatus() {
+    return $this->form->get('field_issue_status[und]')->getValue();
+  }
+
+  public function getPriority() {
+    return $this->form->get('field_issue_priority[und]')->getValue();
+  }
+
   /**
    * Returns the list of available components.
    *

@@ -17,6 +17,13 @@ class Issue {
   protected $uri;
 
   /**
+   * @var \Symfony\Component\DomCrawler\Crawler
+   */
+  protected $crawler;
+
+  protected $title;
+
+  /**
    * @param string $issue_id
    *   NID or URI of an issue.
    */
@@ -27,7 +34,22 @@ class Issue {
     elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
       $this->uri = $issue_id;
     }
+    $this->nid = str_replace('https://drupal.org/node/', '', $this->uri);
+
     $this->getIssue();
+  }
+
+  public function getNid() {
+    return $this->nid;
+  }
+
+  public function getTitle() {
+    if (!isset($this->title)) {
+      $this->getIssue();
+      $this->title = $this->crawler->filter('h1')->first()->text();
+    }
+
+    return $this->title;
   }
 
   protected function getIssue() {
