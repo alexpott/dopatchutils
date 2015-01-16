@@ -11,8 +11,12 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\CommentEditor;
 use DrupalPatchUtils\DoBrowser;
+use DrupalPatchUtils\IssuePriority;
+use DrupalPatchUtils\IssueStatus;
+use DrupalPatchUtils\TextEditor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PostIssueComment extends CommandBase {
@@ -37,6 +41,10 @@ class PostIssueComment extends CommandBase {
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$output instanceof ConsoleOutputInterface) {
+            throw new \Exception('Console output needed.');
+        }
+
         $url = $input->getArgument('url');
         $issue = $this->getIssue($url);
 
@@ -46,12 +54,35 @@ class PostIssueComment extends CommandBase {
         $comment_form = $browser->getCommentForm($issue->getUri());
 
         $comment_editor = new CommentEditor($comment_form);
-        print $comment_editor->generateContent($issue, $input->getArgument('files'));
+        $template = $comment_editor->generateContent($issue, $input->getArgument('files'));
+
+        $editor = new TextEditor();
+        $result = $editor->editor($output, $template);
+
+        $body = $comment_editor->getCommentText($result);
+        $metadata = $comment_editor->getMetadata($result);
+
+        $comment_form->setCommentText($body);
+
+        if (isset($metadata['status'])) {
+            $comment_form->setStatus(IssueStatus::toInteger($metadata['status']));
+        }
+
+        if (isset($metadata['priority'])) {
+            $comment_form->setPriority(IssuePriority::toInteger($metadata['priority']));
+        }
+
+        $crawler = $browser->submitForm($comment_form->getForm());
+
+        if ($errors = $browser->getErrors($crawler)) {
+            $output->getErrorOutput()->writeln($errors);
+        }
+        else {
+              $uri = $browser->getClient()->getHistory()->current()->getUri();
+              $output->writeln(sprintf('Posting the issue was successful: %s', $uri));
+        }
+
         return;
-
-        $comment_form->setCommentText('Added comment.');
-
-        $browser->submitForm($comment_form->getForm());
     }
 
 }

@@ -8,7 +8,8 @@
 namespace DrupalPatchUtils;
 
 
-class CommentEditor {
+class CommentEditor
+{
 
     /**
      * @var \DrupalPatchUtils\CommentForm
@@ -40,7 +41,8 @@ class CommentEditor {
         $output[] = '#';
         $output[] = '# Status: ' . IssueStatus::toString($this->commentForm->getStatus());
         foreach (IssueStatus::getDefinition() as $definition) {
-            $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ', $definition['aliases']);
+            $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ',
+                $definition['aliases']);
         }
 
         $output[] = '#';
@@ -65,6 +67,38 @@ class CommentEditor {
     protected function filterInvalidLines(array $lines)
     {
 
+    }
+
+    public function getCommentText($lines)
+    {
+        $array = explode("\n", $lines);
+        $lines = array_filter($array, function ($value) {
+            return !(isset($value[0]) && $value[0] == '#');
+        });
+
+        return implode("\n", $lines);
+    }
+
+    public function getMetadata($lines)
+    {
+        $metadata = array();
+        foreach (explode(PHP_EOL, $lines) as $line) {
+            if (strpos($line, '# Tags:') === 0) {
+                $metadata['tags'] = trim(str_replace('# Tags: ', '', $line));
+            }
+            if (strpos($line, '# Status:') === 0) {
+                $status = trim(str_replace('# Status: ', '', $line));
+
+                $metadata['status'] = $status;
+            }
+            if (strpos($line, '# Priority:') === 0) {
+                $priority = trim(str_replace('# Priority: ', '', $line));
+
+                $metadata['priority'] = $priority;
+            }
+        }
+
+        return $metadata;
     }
 
 }

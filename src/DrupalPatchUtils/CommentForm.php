@@ -9,9 +9,6 @@
 
 namespace DrupalPatchUtils;
 
-
-use Symfony\Component\DomCrawler\Form;
-
 class CommentForm extends DoFormBase {
 
   public function setCommentText($text) {

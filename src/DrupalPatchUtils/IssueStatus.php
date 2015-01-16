@@ -10,7 +10,8 @@ namespace DrupalPatchUtils;
 /**
  * Defines drupal.org issue statuses.
  */
-class IssueStatus {
+class IssueStatus extends IssueMetadata
+{
 
     /*
     1  Active
@@ -59,7 +60,8 @@ class IssueStatus {
      *
      * @return array
      */
-    public static function getOpenIssues() {
+    public static function getOpenIssues()
+    {
         return array(
           self::ACTIVE,
           self::NEEDS_WORK,
@@ -72,7 +74,8 @@ class IssueStatus {
         );
     }
 
-    public static function getDefinition() {
+    public static function getDefinition()
+    {
         return array(
           self::ACTIVE => array(
             'label' => 'Active',
@@ -161,29 +164,6 @@ class IssueStatus {
             ),
           ),
         );
-    }
-
-    public static function aliasMapReverse() {
-        $map = self::getDefinition();
-        $aliases = array();
-        foreach ($map as $status => $definition) {
-            $aliases[$definition['label']] = $status;
-            $aliases = array_merge($aliases, array_fill_keys($definition['aliases'], $status));
-        }
-        return $aliases;
-    }
-
-    public static function toInteger($string) {
-        $string = trim($string);
-        if (is_numeric($string)) {
-            return $string;
-        }
-        $map = self::aliasMapReverse();
-        return isset($map[$string]) ? $map[$string] : FALSE;
-    }
-
-    public static function toString($integer) {
-        return static::getDefinition()[$integer]['label'];
     }
 
 }

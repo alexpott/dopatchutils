@@ -83,6 +83,18 @@ class DoFormBase {
   }
 
   /**
+   * @param integer $value
+   *
+   * @return $this
+   */
+  public function setPriority($value) {
+    $status = $this->form->get('field_issue_priority[und]');
+    $status->setValue($value);
+    $this->form->set($status);
+    return $this;
+  }
+
+  /**
    * Returns the list of available components.
    *
    * @return array
