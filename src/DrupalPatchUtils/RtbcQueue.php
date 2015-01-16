@@ -16,7 +16,7 @@ use Guzzle\Http\Url;
 
 class RtbcQueue {
 
-  const DEFAULT_URI = 'https://drupal.org/project/issues/drupal?status=14&version=8.x&text=&priorities=All&categories=All&component=All&order=last_comment_timestamp&sort=asc';
+  const DEFAULT_URI = 'https://www.drupal.org/project/issues/drupal?status=14&version=8.x&text=&priorities=All&categories=All&component=All&order=last_comment_timestamp&sort=asc';
 
   /**
    * @var \Guzzle\Http\Url
