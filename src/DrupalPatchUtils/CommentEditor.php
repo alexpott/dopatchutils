@@ -41,34 +41,21 @@ class CommentEditor
         $output[] = '#';
         $output[] = '# Status: ' . IssueStatus::toString($this->commentForm->getStatus());
         foreach (IssueStatus::getDefinition() as $definition) {
-            $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ',
-                $definition['aliases']);
+            $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ', $definition['aliases']);
         }
 
         $output[] = '#';
-        $output[] = '# Priority: ' . $this->commentForm->getPriority();
-//        if (isset($issue_settings['priority'])) {
-//            foreach (IssuePriority::getDefinition() as $definition) {
-//                $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ', $definition['aliases']);
-//            }
-//        }
+        $output[] = '# Priority: ' . IssuePriority::toString($this->commentForm->getPriority());
+        foreach (IssuePriority::getDefinition() as $definition) {
+            $output[] = '#  - ' . $definition['label'] . ' - ' . implode(', ', $definition['aliases']);
+        }
 
         $output[] = '#';
         $output[] = '# Tags: ' . implode(', ', $this->commentForm->getTags());
 
         return implode("\n", $output);
     }
-
-    public function extractContent($text)
-    {
-
-    }
-
-    protected function filterInvalidLines(array $lines)
-    {
-
-    }
-
+    
     public function getCommentText($lines)
     {
         $array = explode("\n", $lines);
