@@ -53,14 +53,19 @@ class PostIssueComment extends CommandBase {
 
         $comment_form = $browser->getCommentForm($issue->getUri());
 
+
+        $files = $input->getArgument('files');
+
         $comment_editor = new CommentEditor($comment_form);
-        $template = $comment_editor->generateContent($issue, $input->getArgument('files'));
+        $template = $comment_editor->generateContent($issue, $files);
 
         $editor = new TextEditor();
         $result = $editor->editor($output, $template);
 
         $body = $comment_editor->getCommentText($result);
         $metadata = $comment_editor->getMetadata($result);
+
+        $comment_form->uploadFiles($files);
 
         $comment_form->setCommentText($body);
 
