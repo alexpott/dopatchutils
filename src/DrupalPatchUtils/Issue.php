@@ -17,21 +17,27 @@ class Issue {
   protected $uri;
 
   /**
+   * @var \Symfony\Component\DomCrawler\Crawler
+   */
+  protected $crawler;
+
+  /**
    * @param string $issue_id
    *   NID or URI of an issue.
    */
-  public function __construct($issue_id) {
+  public function __construct($issue_id, DoBrowser $browser = NULL) {
     if (is_numeric($issue_id)) {
       $this->uri = 'https://www.drupal.org/node/' . $issue_id;
     }
     elseif (filter_var($issue_id, FILTER_VALIDATE_URL) !== false) {
       $this->uri = $issue_id;
     }
+    $this->browser = $browser;
     $this->getIssue();
   }
 
   protected function getIssue() {
-    $doBrowser = new DoBrowser();
+    $doBrowser = $this->getDoBrowser();
     // Get guzzle client.
     // @todo swap all this for proper dependency injection.
     $client = $doBrowser->getClient()->getClient();
@@ -42,6 +48,17 @@ class Issue {
     $this->crawler = new Crawler($this->html);
     return $this;
   }
+
+  /**
+   * @return \DrupalPatchUtils\DoBrowser
+   */
+  protected function getDoBrowser() {
+    if (isset($this->browser)) {
+      return $this->browser;
+    }
+    return new DoBrowser();
+  }
+
   /**
    * Gets the URI of the issue.
    *
@@ -99,5 +116,14 @@ class Issue {
       return TRUE;
     }
     return FALSE;
+  }
+
+  /**
+   * Gets the crawler.
+   *
+   * @return \Symfony\Component\DomCrawler\Crawler
+   */
+  public function getCrawler() {
+    return $this->crawler;
   }
 }

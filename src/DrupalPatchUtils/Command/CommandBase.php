@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Config;
+use DrupalPatchUtils\DoBrowser;
 use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,9 +36,9 @@ class CommandBase extends Command {
    * @param $uri
    * @return Issue|bool
    */
-  protected function getIssue($uri) {
+  protected function getIssue($uri, DoBrowser $browser = NULL) {
     try {
-      return new Issue($uri);
+      return new Issue($uri, $browser);
     } catch (\Exception $e) {
       return FALSE;
     }

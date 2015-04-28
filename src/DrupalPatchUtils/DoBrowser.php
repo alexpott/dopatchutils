@@ -17,6 +17,13 @@ use Symfony\Component\DomCrawler\Form;
 
 class DoBrowser {
 
+  /**
+   * The Drupal.org URL.
+   *
+   * @var string
+   */
+  const DO_URL = 'https://www.drupal.org';
+
   /** @var \Goutte\Client */
   protected $client;
 
