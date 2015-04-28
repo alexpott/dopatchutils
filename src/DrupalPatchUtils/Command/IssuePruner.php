@@ -49,11 +49,13 @@ class IssuePruner extends CommandBase {
         ->filter('div.system-message.testing-failed li.comment-delete a')
         ->extract(array('href'));
       $output->writeln(count($delete_links) . ' comments to delete.');
-      foreach ($delete_links as $delete_link) {
-        $output->writeln('Deleting ' . $delete_link);
-        $crawler = $browser->getClient()->request('GET', DoBrowser::DO_URL . $delete_link);
-        $form = $crawler->selectButton('Delete')->form();
-        $browser->submitForm($form);
+      if ($this->getDialog()->askConfirmation($output, 'Delete all of these comments (yes/NO)? ', FALSE)) {
+        foreach ($delete_links as $delete_link) {
+          $output->writeln('Deleting ' . $delete_link);
+          $crawler = $browser->getClient()->request('GET', DoBrowser::DO_URL . $delete_link);
+          $form = $crawler->selectButton('Delete')->form();
+          $browser->submitForm($form);
+        }
       }
     }
   }
