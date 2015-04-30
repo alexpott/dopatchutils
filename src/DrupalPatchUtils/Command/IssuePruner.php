@@ -27,7 +27,7 @@ class IssuePruner extends CommandBase {
     $this
       ->setName('issuePruner')
       ->setAliases(array('iprune'))
-      ->setDescription('Removes failed test comments from an issue')
+      ->setDescription('Removes failed and requeued test comments from an issue')
       ->addArgument(
         'url',
         InputArgument::REQUIRED,
@@ -46,7 +46,7 @@ class IssuePruner extends CommandBase {
 
     if ($issue = $this->getIssue($input->getArgument('url'), $browser)) {
       $delete_links = $issue->getCrawler()
-        ->filter('div.system-message.testing-failed li.comment-delete a')
+        ->filter('div.system-message.testing-failed li.comment-delete a, div.system-message.queued-retesting li.comment-delete a')
         ->extract(array('href'));
       $output->writeln(count($delete_links) . ' comments to delete.');
       if ($this->getDialog()->askConfirmation($output, 'Delete all of these comments (yes/NO)? ', FALSE)) {
