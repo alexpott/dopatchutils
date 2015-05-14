@@ -33,7 +33,7 @@ class RemainingCriticals extends CommandBase {
     {
 
         $client = new Client();
-        // Bypass access checking.
+        // Bypass page caching.
         $crawler = $client->request('GET', static::DRUPAL_ORG_8_PAGE . '?foo=' . rand(0, 1000));
 
         $amount_criticals = $crawler->filter('#block-drupalorg-project-critical-count h3 a')->text();
