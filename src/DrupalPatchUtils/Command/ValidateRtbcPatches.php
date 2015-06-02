@@ -11,6 +11,7 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\RtbcQueue;
 use DrupalPatchUtils\DoBrowser;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,10 +43,10 @@ class ValidateRtbcPatches extends ValidatePatch {
     $issues = $rtbc_queue->getIssueUris();
     $output->writeln(count($issues) . ' issues to check.');
 
-    $progress = $this->getApplication()->getHelperSet()->get('progress');
+    $progress = new ProgressBar($output, count($issues));
 
     $failed_patches = array();
-    $progress->start($output, count($issues));
+    $progress->start();
     foreach ($issues as $item) {
       $input->setArgument('url', $item);
       // Ignore NULL return where checkPatch() is unable to determine if patch
@@ -60,8 +61,8 @@ class ValidateRtbcPatches extends ValidatePatch {
 
     if (count($failed_patches)) {
       $output->writeln(array_map(function ($value) {return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';}, $failed_patches));
-      if ($input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
-        $browser = $this->login($output);
+      if ($input->getOption('mark-needs-work') && $this->askConfirmation($input, $output, 'Post comments to these issues (yes/NO)? ')) {
+        $browser = $this->login($input, $output);
         foreach ($failed_patches as $item) {
           $comment_form = $browser->getCommentForm($item['issue']);
           $comment_form->setStatusNeedsWork();

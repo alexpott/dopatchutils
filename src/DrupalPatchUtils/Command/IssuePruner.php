@@ -46,7 +46,7 @@ class IssuePruner extends CommandBase {
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $browser = $this->login($output);
+    $browser = $this->login($input, $output);
     if ($issue = $this->getIssue($input->getArgument('url'), $browser)) {
       $this->pruneSystemComments($issue, $browser, $input, $output);
 
@@ -64,7 +64,7 @@ class IssuePruner extends CommandBase {
       ->extract(array('href'));
     $output->writeln(count($delete_links) . ' comments to delete.');
 
-    if (count($delete_links) > 0 && $this->getDialog()->askConfirmation($output, 'Delete all of these comments (yes/NO)? ', FALSE)) {
+    if (count($delete_links) > 0 && $this->askConfirmation($input, $output, 'Delete all of these comments (yes/NO)? ')) {
       foreach ($delete_links as $delete_link) {
         $output->writeln('Deleting ' . $delete_link);
         $crawler = $browser->getClient()->request('GET', DoBrowser::DO_URL . $delete_link);
@@ -103,7 +103,7 @@ class IssuePruner extends CommandBase {
         }
         $output->writeln("Comment text: " . trim($text));
 
-        if ($this->getDialog()->askConfirmation($output, 'Delete this comment (yes/NO)? ', FALSE)) {
+        if ($this->askConfirmation($input, $output, 'Delete this comment (yes/NO)? ')) {
           $delete_link = $crawler->filter('li.comment-delete a, div.system-message.queued-retesting li.comment-delete a')->extract(array('href'));
           $delete_link = $delete_link[0];
           $this->deleteComment($delete_link, $browser, $output);

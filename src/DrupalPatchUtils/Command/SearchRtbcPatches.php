@@ -10,6 +10,7 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\RtbcQueue;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,8 +48,8 @@ class SearchRtbcPatches extends SearchIssuePatch {
     $issues_to_search = $rtbc_queue->getIssueUris();
     $output->writeln(count($issues_to_search) . ' issues to search.');
 
-    $progress = $this->getApplication()->getHelperSet()->get('progress');
-    $progress->start($output, count($issues_to_search));
+    $progress = new ProgressBar($output, 50);
+    $progress->start();
     foreach ($issues_to_search as $item) {
       $input->setArgument('url', $item);
       parent::execute($input, $output);

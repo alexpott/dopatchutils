@@ -11,12 +11,10 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Config;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Console\Question\Question;
 
 class Configure extends Command {
 
@@ -31,17 +29,17 @@ class Configure extends Command {
   {
     $config = new Config();
     $config->load();
-    $app = $this->getApplication();
+    $question_helper = new QuestionHelper();
 
-    /** @var \Symfony\Component\Console\Helper\DialogHelper $dialog */
-    $dialog = $app->getHelperSet()->get('dialog');
     try {
       $default = $config->getCacheDir();
     }
     catch (\Exception $e) {
       $default = FALSE;
     }
-    $cache_dir = $dialog->askAndValidate($output, "Enter path to cache dir ($default): ", array($this, 'validateCacheDir'), FALSE, $default);
+    $question = new Question("Enter path to cache dir ($default): ", $default);
+    $question->setValidator(array($this, 'validateCacheDir'));
+    $cache_dir = $question_helper->ask($input, $output, $question);
 
     try {
       $default = $config->getDrupalRepoDir();
@@ -49,14 +47,18 @@ class Configure extends Command {
     catch (\Exception $e) {
       $default = FALSE;
     }
-    $repo_dir = $dialog->askAndValidate($output, "Enter path to Drupal repository ($default): ", array($this, 'validateDrupalRepo'), FALSE, $default);
+    $question = new Question("Enter path to Drupal repository ($default): ", $default);
+    $question->setValidator(array($this, 'validateDrupalRepo'));
+    $repo_dir = $question_helper->ask($input, $output, $question);
+
     try {
       $default = $config->getDrupalUser();
     }
     catch (\Exception $e) {
       $default = FALSE;
     }
-    $douser = $dialog->ask($output, "Enter username to use on d.o ($default): ", $default);
+    $question = new Question("Enter username to use on d.o ($default): ", $default);
+    $douser = $question_helper->ask($input, $output, $question);
 
     try {
       $default = $config->getHoneypotSleepTime();
@@ -64,7 +66,8 @@ class Configure extends Command {
     catch (\Exception $e) {
       $default = 20;
     }
-    $honeypot_sleep_time = $dialog->ask($output, "Enter honeypot sleep time: ($default)", $default);
+    $question = new Question("Enter honeypot sleep time ($default): ", $default);
+    $honeypot_sleep_time = $question_helper->ask($input, $output, $question);
 
     $config
       ->setCacheDir($cache_dir)

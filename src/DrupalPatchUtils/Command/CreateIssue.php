@@ -7,15 +7,16 @@
 
 namespace DrupalPatchUtils\Command;
 
-use DrupalPatchUtils\DoBrowser;
 use DrupalPatchUtils\IssueSummaryTemplate;
 use DrupalPatchUtils\Uuid;
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -43,30 +44,31 @@ class CreateIssue extends CommandBase {
       throw new \Exception('Console output needed.');
     }
 
-    $browser = $this->login($output);
+    $browser = $this->login($input, $output);
 
     $project = $input->getArgument('project');
     $project_form = $browser->getIssueForm($project);
 
-    // Ask for the common stuff.
-    $app = $this->getApplication();
-    $dialog = $app->getHelperSet()->get('dialog');
-    /** @var DialogHelper $dialog */
+    $question_helper = new QuestionHelper();
 
-    $title = $dialog->ask($output, 'Enter title: ');
+    $question = new Question('Enter title: ');
+    $title = $question_helper->ask($input, $output, $question);
     $project_form->setTitle($title);
 
     // Limit the list of allowed values.
     $versions = array_slice($project_form->getVersions(), 0, 5);
-    $version = $dialog->select($output, 'Select version: ', $versions);
+    $question = new ChoiceQuestion('Select version: ', $versions);
+    $version = $question_helper->ask($input, $output, $question);
     $project_form->setVersion($versions[$version]);
 
     $components = $project_form->getComponents();
-    $component = $dialog->select($output, 'Select component: ', $components);
+    $question = new ChoiceQuestion('Select component: ', $components);
+    $component = $question_helper->ask($input, $output, $question);
     $project_form->setComponent($components[$component]);
 
     $categories = [1 => 'Bug report', 2 => 'Task', 3 => 'Feature request', 4 => 'Support request'];
-    $category = $dialog->select($output, 'Select category: (Task) ', $categories, 2);
+    $question = new ChoiceQuestion('Select category (Task): ', $categories);
+    $category = $question_helper->ask($input, $output, $question);
     $project_form->setCategory($category);
 
     // Allow to input the main body either via an editor or in the shell.
@@ -88,7 +90,8 @@ class CreateIssue extends CommandBase {
       $body_text = file_get_contents($temp_file);
     }
     else {
-      $body_text = $dialog->ask($output, 'Enter body: ', 'TODO');
+      $question = new Question('Enter body: ', 'TODO');
+      $body_text = $question_helper->ask($input, $output, $question);
     }
 
     $project_form->setBody($body_text);

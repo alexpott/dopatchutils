@@ -33,7 +33,7 @@ class PostComment extends CommandBase {
   {
     $issue = $this->getIssue($input->getArgument('url'));
     if ($issue) {
-      $browser = $this->login($output);
+      $browser = $this->login($input, $output);
 
       $comment_form = $browser->getCommentForm($issue->getUri());
 

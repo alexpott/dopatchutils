@@ -36,7 +36,7 @@ class Login extends CommandBase {
       throw new \Exception('console output needed.');
     }
 
-    $this->login($output);
+    $this->login($input, $output);
     $output->writeln('Login successful or already logged in.');
   }
 
