@@ -61,8 +61,7 @@ class ValidateRtbcPatches extends ValidatePatch {
     if (count($failed_patches)) {
       $output->writeln(array_map(function ($value) {return '<fg=red>' . $value['patch'] . ' on ' . $value['issue'] . ' no longer applies.</fg=red>';}, $failed_patches));
       if ($input->getOption('mark-needs-work') && $this->getDialog()->askConfirmation($output, 'Post comments to these issues (yes/NO)? ', FALSE)) {
-        $browser = new DoBrowser();
-        $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
+        $browser = $this->login($output);
         foreach ($failed_patches as $item) {
           $comment_form = $browser->getCommentForm($item['issue']);
           $comment_form->setStatusNeedsWork();

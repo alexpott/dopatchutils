@@ -43,10 +43,7 @@ class CreateIssue extends CommandBase {
       throw new \Exception('Console output needed.');
     }
 
-    $browser = new DoBrowser();
-    if (!$browser->loggedIn()) {
-      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-    }
+    $browser = $this->login($output);
 
     $project = $input->getArgument('project');
     $project_form = $browser->getIssueForm($project);

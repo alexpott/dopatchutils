@@ -91,4 +91,18 @@ class CommandBase extends Command {
   protected function askConfirmation (OutputInterface $output, $question, $default = FALSE) {
     return $this->getDialog()->askConfirmation($output, $question, $default);
   }
+
+  /**
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   *
+   * @return \DrupalPatchUtils\DoBrowser
+   * @throws \Exception
+   */
+  protected function login(OutputInterface $output) {
+    $browser = new DoBrowser();
+    if (!$browser->loggedIn()) {
+      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE), $this->ask($output, "Enter tfa code (if activated for account): ", '', TRUE));
+    }
+    return $browser;
+  }
 }

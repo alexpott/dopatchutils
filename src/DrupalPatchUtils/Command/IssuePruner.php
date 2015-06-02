@@ -46,12 +46,7 @@ class IssuePruner extends CommandBase {
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $browser = new DoBrowser();
-    if (!$browser->loggedIn()) {
-      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-    }
-
-
+    $browser = $this->login($output);
     if ($issue = $this->getIssue($input->getArgument('url'), $browser)) {
       $this->pruneSystemComments($issue, $browser, $input, $output);
 

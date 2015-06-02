@@ -49,7 +49,14 @@ class DoBrowser {
     return $log_in_button->count() == 0;
   }
 
-  public function login($user, $pass) {
+  /**
+   * @param $user
+   * @param $pass
+   * @param $tfa_code
+   * @return \Symfony\Component\DomCrawler\Crawler
+   * @throws \Exception
+   */
+  public function login($user, $pass, $tfa_code) {
     $crawler = $this->client->request('GET', 'https://www.drupal.org/user/');
     // Check if already logged in.
     if (($select_button = $crawler->selectButton('Log in')) && $select_button->count()) {
@@ -60,6 +67,16 @@ class DoBrowser {
       if ($login_errors->count() > 0) {
         print_r($login_errors);
         throw new \Exception("Login to drupal.org failed.");
+      }
+      $tfa = $crawler->selectButton('Verify');
+      if ($tfa->count()) {
+        $form = $tfa->form();
+        $crawler = $this->client->submit($form, array('code' => $tfa_code));
+        $login_errors = $crawler->filter('.messages-error');
+        if ($login_errors->count() > 0) {
+          print_r($login_errors);
+          throw new \Exception("Two factor authentication to drupal.org failed.");
+        }
       }
     }
     return $crawler;
