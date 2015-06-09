@@ -15,7 +15,7 @@ use Symfony\Component\DomCrawler\Form;
 class CommentForm extends DoFormBase {
 
   public function setCommentText($text) {
-    $comment = $this->form->get('nodechanges_comment_body[value]');
+    $comment = $this->form->get('nodechanges_comment[comment_body][und][0][value]');
     $comment->setValue($text);
     $this->form->set($comment);
     return $this;

@@ -96,7 +96,7 @@ class Issue {
         ->filter('table#extended-file-field-table-field-issue-files td.extended-file-field-table-filename a')
         ->extract(array('href'));
       $this->patches = array_filter($files, function ($item) {
-        if (preg_match('/\.(patch|diff)$/', $item) && !preg_match('/do(_|-)not(_|-)test\.patch$/', $item)) {
+        if (preg_match('/\.(patch|diff)$/', $item) && !preg_match('/do(_|-)not(_|-)test\.(patch|diff)/', $item)) {
           return TRUE;
         }
         return FALSE;
