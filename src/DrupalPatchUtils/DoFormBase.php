@@ -71,5 +71,10 @@ class DoFormBase {
     return $this;
   }
 
+  public function getStatus() {
+    $status = $this->form->get('field_issue_status[und]');
+    return $status->getValue();
+  }
+
 }
 

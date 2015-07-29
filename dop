@@ -3,6 +3,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use DrupalPatchUtils\Command\CleanupGitBranches;
 use DrupalPatchUtils\Command\Configure;
 use DrupalPatchUtils\Command\CreateIssue;
 use DrupalPatchUtils\Command\IssuePruner;
@@ -29,4 +30,5 @@ $application->add(new Login());
 $application->add(new Logout());
 $application->add(new RemainingCriticals());
 $application->add(new IssuePruner());
+$application->add(new CleanupGitBranches());
 $application->run();
