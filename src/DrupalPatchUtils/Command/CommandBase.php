@@ -10,9 +10,14 @@
 namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Config;
+use DrupalPatchUtils\DoBrowser;
 use DrupalPatchUtils\Issue;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
 class CommandBase extends Command {
 
@@ -35,9 +40,9 @@ class CommandBase extends Command {
    * @param $uri
    * @return Issue|bool
    */
-  protected function getIssue($uri) {
+  protected function getIssue($uri, DoBrowser $browser = NULL) {
     try {
-      return new Issue($uri);
+      return new Issue($uri, $browser);
     } catch (\Exception $e) {
       return FALSE;
     }
@@ -50,16 +55,10 @@ class CommandBase extends Command {
    *
    * @return string
    */
-  protected function ask (OutputInterface $output, $question, $default = '', $hidden_response = FALSE) {
-    // Need to choose patch.
-    $dialog = $this->getDialog();
-    if ($hidden_response) {
-      $response = $dialog->askHiddenResponse($output, $question, $default);
-    }
-    else {
-      $response = $dialog->ask($output, $question, $default);
-    }
-    return $response;
+  protected function ask (InputInterface $input, OutputInterface $output, Question $question, $hidden_response = FALSE) {
+    $question->setHidden($hidden_response);
+    $questionHelper = new QuestionHelper();
+    return $questionHelper->ask($input, $output, $question);
   }
 
   /**
@@ -74,20 +73,29 @@ class CommandBase extends Command {
   }
 
   /**
-   * @return \Symfony\Component\Console\Helper\DialogHelper
+   * @param \Symfony\Component\Console\Input\InputInterface $input
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   * @param $question
+   * @return string
    */
-  protected function getDialog() {
-    $app = $this->getApplication();
-    return $app->getHelperSet()->get('dialog');
+  protected function askConfirmation(InputInterface $input, OutputInterface $output, $question) {
+    $confim = new ConfirmationQuestion($question);
+    $question_helper = new QuestionHelper();
+    return $question_helper->ask($input, $output, $confim);
   }
 
   /**
-   * @param OutputInterface $output
-   * @param $question
-   * @param bool $default
-   * @return bool
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   *
+   * @return \DrupalPatchUtils\DoBrowser
+   * @throws \Exception
    */
-  protected function askConfirmation (OutputInterface $output, $question, $default = FALSE) {
-    return $this->getDialog()->askConfirmation($output, $question, $default);
+  protected function login(InputInterface $input, OutputInterface $output) {
+    $browser = new DoBrowser();
+    if (!$browser->loggedIn()) {
+      $browser->login($this->getConfig()->getDrupalUser(), $this->ask($input, $output, new Question("Enter your Drupal.org password: "), TRUE), $this->ask($input, $output, new Question("Enter tfa code (if activated for account): "), TRUE));
+    }
+    return $browser;
   }
 }

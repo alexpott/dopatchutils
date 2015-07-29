@@ -36,14 +36,7 @@ class Login extends CommandBase {
       throw new \Exception('console output needed.');
     }
 
-    $browser = new DoBrowser();
-    $crawler = $browser->login($this->getConfig()->getDrupalUser(), $this->ask($output, "Enter your Drupal.org password: ", '', TRUE));
-
-    if ($errors = $browser->getErrors($crawler)) {
-      $output->getErrorOutput()->writeln($errors);
-      return;
-    }
-
+    $this->login($input, $output);
     $output->writeln('Login successful or already logged in.');
   }
 

@@ -42,7 +42,7 @@ class Config {
   public function load() {
     if (is_file($this->getConfigFilename())) {
       $yaml = new Yaml();
-      $config = $yaml->parse($this->getConfigFilename());
+      $config = $yaml->parse(file_get_contents($this->getConfigFilename()));
       $this->drupalRepoDir = isset($config['drupal_repository_dir']) ? $config['drupal_repository_dir'] : '';
       $this->drupalUser = isset($config['drupal_user']) ? $config['drupal_user'] : '';
       $this->cacheDir = isset($config['cache_dir']) ? $config['cache_dir'] : '';

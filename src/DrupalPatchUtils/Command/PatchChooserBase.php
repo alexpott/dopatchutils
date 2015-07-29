@@ -11,10 +11,10 @@ namespace DrupalPatchUtils\Command;
 
 use DrupalPatchUtils\Issue;
 use Guzzle\Http\Client;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 abstract class PatchChooserBase extends CommandBase {
 
@@ -38,17 +38,18 @@ abstract class PatchChooserBase extends CommandBase {
     $patches_to_search = $issue->getLatestPatch();
     if (count($patches_to_search) > 1) {
       // Need to choose patch.
-      $app = $this->getApplication();
-      $dialog = $app->getHelperSet()->get('dialog');
+      $question_helper = new QuestionHelper();
       $output->writeln('Multiple patches detected:');
       $output->writeln($this->getChoices($patches_to_search));
 
-      $patch_key = $dialog->askAndValidate($output, 'Choose patch to search: ', function ($patch_key) use ($patches_to_search) {
+      $question = new Question('Choose patch to search: ', 1);
+      $question->setValidator(function ($patch_key) use ($patches_to_search) {
         if (!in_array($patch_key, range(0 ,count($patches_to_search)))) {
           throw new \InvalidArgumentException(sprintf('Choice "%s" is invalid.', $patch_key));
         }
         return $patch_key;
-      }, false, 1);
+      });
+      $patch_key = $question_helper->ask($input, $output, $question);
       $patch = $patches_to_search[$patch_key - 1];
     }
     elseif (count($patches_to_search) == 1) {

@@ -2,12 +2,12 @@
     "require": {
            "cpliakas/git-wrapper": "1.0.0-RC1",
            "fabpot/goutte": "1.0.*@dev",
-           "symfony/console": "v2.4.1",
-           "symfony/css-selector": "v2.4.1",
-           "symfony/dom-crawler": "2.5.*@dev",
-           "symfony/yaml": "v2.4.1",
-           "symfony/filesystem": "2.4.1",
-           "symfony/process": "2.5.5",
+           "symfony/console": "2.7.*",
+           "symfony/css-selector": "2.7.*",
+           "symfony/dom-crawler": "2.7.*",
+           "symfony/yaml": "2.7.*",
+           "symfony/filesystem": "2.7.*",
+           "symfony/process": "2.7.*",
            "guzzle/plugin-cookie": "*"
     },
     "autoload": {
