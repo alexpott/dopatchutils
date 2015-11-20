@@ -60,11 +60,23 @@ class DoFormBase {
   public function getForm () {
     return $this->form;
   }
+
+  /**
+   * @param string $value
+   * @return $this
+   */
+  public function setVersion($value) {
+    $status = $this->form->get('field_issue_version[und]');
+    $status->setValue($value);
+    $this->form->set($status);
+    return $this;
+  }
+
   /**
    * @param integer $value
    * @return $this
    */
-  protected function setStatus($value) {
+  public function setStatus($value) {
     $status = $this->form->get('field_issue_status[und]');
     $status->setValue($value);
     $this->form->set($status);
