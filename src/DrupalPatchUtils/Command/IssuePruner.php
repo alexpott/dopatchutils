@@ -66,10 +66,7 @@ class IssuePruner extends CommandBase {
 
     if (count($delete_links) > 0 && $this->askConfirmation($input, $output, 'Delete all of these comments (yes/NO)? ')) {
       foreach ($delete_links as $delete_link) {
-        $output->writeln('Deleting ' . $delete_link);
-        $crawler = $browser->getClient()->request('GET', DoBrowser::DO_URL . $delete_link);
-        $form = $crawler->selectButton('Delete')->form();
-        $browser->submitForm($form);
+        $this->deleteComment($delete_link, $browser, $output);
         $deleted_comments++;
       }
       $output->writeln("Deleted $deleted_comments system comments.");
@@ -119,6 +116,8 @@ class IssuePruner extends CommandBase {
     $output->writeln('Deleting ' . $delete_link);
     $crawler = $browser->getClient()->request('GET', DoBrowser::DO_URL . $delete_link);
     $form = $crawler->selectButton('Delete')->form();
+    // Deal with mollom. Choose the no feedback option.
+    $form['mollom']['feedback']->select('');
     $browser->submitForm($form);
   }
 }

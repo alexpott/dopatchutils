@@ -3,9 +3,11 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use DrupalPatchUtils\Command\BulkIssueCredit;
 use DrupalPatchUtils\Command\Configure;
 use DrupalPatchUtils\Command\CreateIssue;
 use DrupalPatchUtils\Command\IssuePruner;
+use DrupalPatchUtils\Command\IssueStat;
 use DrupalPatchUtils\Command\Login;
 use DrupalPatchUtils\Command\Logout;
 use DrupalPatchUtils\Command\PostComment;
@@ -29,4 +31,6 @@ $application->add(new Login());
 $application->add(new Logout());
 $application->add(new RemainingCriticals());
 $application->add(new IssuePruner());
+$application->add(new IssueStat());
+$application->add(new BulkIssueCredit());
 $application->run();

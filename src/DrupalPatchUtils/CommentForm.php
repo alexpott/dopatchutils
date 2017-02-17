@@ -21,4 +21,11 @@ class CommentForm extends DoFormBase {
     return $this;
   }
 
+  public function addIssueCredit($text) {
+    $comment = $this->form->get('add_credit');
+    $comment->setValue($text);
+    $this->form->set($comment);
+    return $this;
+  }
+
 }
