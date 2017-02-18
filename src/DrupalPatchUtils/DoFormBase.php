@@ -17,7 +17,7 @@ class DoFormBase {
   const STATUS_RTBC = 14;
   const STATUS_PATCH = 15;
   const STATUS_FIXED = 2;
-  const STATUS_POSTPONED = 14;
+  const STATUS_POSTPONED = 4;
   const STATUS_POSTPONED_MORE_INFO = 16;
   const STATUS_CLOSED_DUPLICATE = 3;
   const STATUS_CLOSED_WONT_FIX = 5;
